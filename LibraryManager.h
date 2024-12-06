@@ -14,17 +14,17 @@ class LibraryManager {
     unordered_map< Book , User > inventory; //maps book to user
     unordered_map< string , vector <Book> > sortGenre;//maps genre to a list of books 
 
-    //print user info
+    //print user info //J
 
-    //add a book to the inventory and genre list
+    //add a book to the inventory and genre list //J
 
-    //remove a book from the database and genre list
+    //remove a book from the database and genre list  //J
 
-    //update the inventory - checkout(value=user) OR return(value = null), will need to update the books avail.
+    //update the inventory - checkout(value=user) OR return(value = null), will need to update the books avail. //E
 
-    //queue waitlist for a book
+    //queue waitlist for a book //E
 
-    //queue search alg for users position in waitlist
+    //queue search alg for users position in waitlist //E
 
     
 };
