@@ -15,20 +15,15 @@ private:
     string genre;
     bool status;
 public:
-    Book(int isbn, string title, string genre, bool status) {
-        this->isbn = isbn;
+    Book(string title, string genre, bool status) {
         this->title = title;
         this->genre = genre;
         this->status = status;
     }
-    Book(int isbn, string title, string genre) {
-        this->isbn = isbn;
+    Book(string title, string genre) {
         this->title = title;
         this->genre = genre;
         status = true;
-    }
-    int GetIsbn() {
-        return isbn;
     }
     string GetTitle() {
         return title;
