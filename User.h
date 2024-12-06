@@ -10,19 +10,23 @@ using namespace std;
 
 class User {
 private:
+    string userName;
     string firstName;
-    string lastName;
     int phoneNumber;
     string favGenre;
     vector<Book> books;
-
+    
 public:
-    User(string first, int phone, string genre) {
+    User(string username, string first, int phone, string genre) {
+        userName = username;
         firstName = first;
         phoneNumber = phone;
         favGenre = genre;
         books = {};
+    }
 
+    string GetUsername(){
+        return userName;
     }
     void CheckOutBook(Book book) {
         books.push_back(book);

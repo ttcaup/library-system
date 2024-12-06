@@ -45,8 +45,8 @@ public:
     void SetStatus(bool status) {
         this->status = status;
     }
-    void PrintInfo() {
-        cout << "Book Info" << endl;
+    void PrintBookInfo() {
+        cout << "Book Info" << endl;//need to do
     }
 
 };

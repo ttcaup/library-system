@@ -20,9 +20,11 @@ class LibraryManager {
 
     //search for a book, does it exist? is it available? when will it be available?
 
-    //quque waitlist for a book
+    //queue waitlist for a book
 
     //search for genre recs
+    
+    //adds a returned book to the database
 };
 
 
