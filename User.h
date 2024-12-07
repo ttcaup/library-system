@@ -28,11 +28,11 @@ public:
     string GetUsername(){
         return userName;
     }
-    void CheckOutBook(Book book) {
+    bool addBook(Book book) {
         books.push_back(book);
     }
 
-    bool ReturnBook(Book book){
+    bool removeBook(Book book){
         books.erase(find(books.begin(), books.end(), book));
         return true;
     }
@@ -49,6 +49,17 @@ public:
 
     void SetGenre(string genre){
         favGenre = genre;
+    }
+    bool bookCheck(Book book){
+        auto it = find(books.begin(), books.end(), book);
+        if (it == books.end()){
+            return false;
+        }
+        else 
+            return true;
+    }
+    vector<Book> getUserBooks(){
+        return books;
     }
 };
 
