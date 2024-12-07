@@ -1,6 +1,23 @@
+//main.cpp
 int main(int argc, char const *argv[])
 {
     //populate books //J
+    unordered_map<string, vector<string>> genreToTitles = {
+        {"Mystery", {"M1", "M2", "M3", "M4", "M5"}}, {"Romance", {"R1", "R2", "R3", "R4", "R5"}},
+        {"Fantasy", {"F1", "F2", "F3", "F4", "F5"}}, {"Horror", {"H1", "H2", "H3", "H4", "H5"}},
+        {"Science Fiction", {"S1", "S2", "S3", "S4", "S5"}}
+    };
+
+    for (const auto& [genre, titles] : genreToTitles) { //looks through,iterates, thorugh genres and books
+        for (const auto& title : titles) {
+            // Create a new book with the current title and genre
+            Book book(title, genre);
+
+            // Add the book to the library
+            library.AddBookToLibrary(book);
+        }
+    }
+
     //and users //E
 
     
