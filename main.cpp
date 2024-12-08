@@ -1,4 +1,13 @@
 //main.cpp
+
+/*
+Library System
+
+Course:  CMPE 126
+Authors: Eden Reader
+         Jasmine Kurian
+
+*/
 #include <iostream>
 #include <string>
 #include "Book.h"
@@ -156,49 +165,58 @@ int main(int argc, char const *argv[])
         //-------------end opening scene-------------------//
 
         //---------------------Menu------------------------//
-        int menuOpt;
-        cout << "--------Menu-------" << endl << endl;
-        cout << "What would you like to do?" << endl;;
-        cout << "1. Checkout a book\n2. Return a book\n3. Enter/Check Waitlist \n4. Account Info" << endl;
-        cout << "Enter your choice (1-4): ";
-        cin >> menuOpt;
+        while(true) {
+            int menuOpt;
+            cout << "--------Menu-------" << endl << endl;
+            cout << "What would you like to do?" << endl;;
+            cout << "1. Checkout a book\n2. Return a book\n3. Enter/Check Waitlist \n4. Account Info\n5. Log Out" << endl;
+            cout << "Enter your choice (1-5): ";
+            cin >> menuOpt;
 
-        //checkout book
-        if(menuOpt == 1){
-            string genre = getGenreChoice();
-            vector<Book> selectedBooks = lib.getBooksByGenre(genre);
-            Book chosenOne = getBookChoice(selectedBooks);
-            if (!lib.checkOutBook(chosenOne,selectedUser)) {
-                cout << "Book Unavailable, checked out by another." << endl; << endl;
+            //checkout book
+            if(menuOpt == 1){
+                string genre = getGenreChoice();
+                vector<Book> selectedBooks = lib.getBooksByGenre(genre);
+                Book chosenOne = getBookChoice(selectedBooks);
+                if (!lib.checkOutBook(chosenOne,selectedUser)) {
+                    cout << "Book Unavailable, checked out by another human." << endl << endl;
+                }
             }
-        }
-        
-        else if(menuOpt == 2){
-            vector <Book> usersBook = selectedUser->getUserBooks();
-            Book chosenOne = getBookChoice(usersBook);
-            if(! lib.returnBook(chosenOne, selectedUser)){
-                cout<<"Looks like you do not have thi book..."<<endl;
+            
+            else if(menuOpt == 2){
+                vector <Book> usersBook = selectedUser->getUserBooks();
+                Book chosenOne = getBookChoice(usersBook);
+                if(! lib.returnBook(chosenOne, selectedUser)){
+                    cout<<"Looks like you do not have this book..."<<endl;
+                }
+                else{
+                    cout<< "Your book was successfully returned!"<<endl;
+                }
+                
+            }
+            else if (menuOpt == 3)
+            {
+                //waitlist
+                
+            }
+            //account info
+            else if (menuOpt == 4)
+            {
+                cout << "Username: " << selectedUser->getUsername() << endl; 
+                cout << "Name: " << selectedUser->getFirst() << endl; 
+                cout << "Favorite Genre: " << selectedUser->getGenre() << endl; 
+                
+            }
+            //logout
+            else if (menuOpt == 5)
+            {
+                //log out
+                break;
+                
             }
             else{
-                cout<< "Your book was successfully returned!"<<endl;
+                cout << "Invalid choice. Please enter a number between 1 and 4.\n";
             }
-            
-        }
-        else if (menuOpt == 3)
-        {
-            //waitlist
-            
-        }
-        //account info
-        else if (menuOpt == 4)
-        {
-            cout << "Username: " << selectedUser->getUsername() << endl; 
-            cout << "Name: " << selectedUser->getFirst() << endl; 
-            cout << "Favorite Genre: " << selectedUser->getGenre() << endl; 
-             
-        }
-        else{
-            cout << "Invalid choice. Please enter a number between 1 and 4.\n";
         }
         
         //------------------end Menu------------------------//

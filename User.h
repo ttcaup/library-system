@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "Book.h"
 
 using namespace std;
@@ -25,7 +26,7 @@ public:
         books = {};
     }
 
-    void addBook(Book book) {
+    void addBook(const Book& book) {
         int left = 0;
         int right = books.size();
 
@@ -41,43 +42,42 @@ public:
         books.insert(books.begin() + left, book);
     }
 
-    bool removeBook(Book book) {
-        auto it = find(books.begin(), books.end(), book);
+bool removeBook(const Book& book) {
+    auto it = find(books.begin(), books.end(), book);
 
-        if (it == books.end()) {
-            return false;
-        }
-        else {
-            books.erase(it);
-            return true;
-        }
+    if (it == books.end()) {
+        return false;
+    } else {
+        books.erase(it);
+        return true;
     }
+}
 
-    string getUsername() {
+    string getUsername() const {
         return userName;
     }
 
-    string getFirst() {
+    string getFirst() const {
         return firstName;
     }
 
-    string getGenre() {
+    string getGenre() const {
         return favGenre;
     }
 
     // void setGenre(string genre){
     //     favGenre = genre;
     // }
-    bool bookCheck(Book book){
-        auto it = find(books.begin(), books.end(), book);
-        if (it == books.end()){
-            return false;
-        }
-        else 
-            return true;
+    bool bookCheck(const Book& book) const {
+        auto it = find(books.begin(), books.end(), book);  // This uses operator== to compare books
+        return it != books.end();
     }
-    vector<Book> getUserBooks(){
+
+    const vector<Book>& getUserBooks() const{
         return books;
+    }
+    bool operator==(const User& other) const {
+        return this->userName == other.getUsername();
     }
 };
 
