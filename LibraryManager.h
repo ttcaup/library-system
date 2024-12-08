@@ -17,12 +17,15 @@ using namespace std;
 class LibraryManager {
     unordered_map< Book , User* > inventory; //maps book to user
     unordered_map< string , vector <Book> > sortGenre;//maps genre to a list of books 
+    deque <User*> waitlist;
+    vector<User> userList; //user database for login, local variable
+
 
     //print user info //J
-    void PrintUserInfo(const User& user) const {
-        cout << "Name: " << user.GetFirst() << endl;
-        cout << "Phone Number: " << user.GetPhone() << endl;
-        cout << "Favorite Genre: " << user.GetGenre() << endl;
+    void PrintUserInfo( User& user) const {
+        cout << "Name: " << user.getFirst() << endl;
+        cout << "Phone Number: " << user.getPhone() << endl;
+        cout << "Favorite Genre: " << user.getGenre() << endl;
     }
 
     //add a book to the inventory and genre list //J
@@ -30,8 +33,8 @@ class LibraryManager {
     //remove a book from the database and genre list  //J
     public:
     //puts book in library and assigns with genre
-    void AddBookToLibrary(const Book& book) {
-        string genre = book.GetGenre(); // gets genre of book
+    void AddBookToLibrary(Book& book) {
+        string genre = book.getGenre(); // gets genre of book
         sortGenre[genre].push_back(book); // adds book to the specific genre's list
     }
     //removes book from both libray and genre list
@@ -42,13 +45,13 @@ class LibraryManager {
         //finds the book (by title) in vector
         //CHECK THIS
         auto it = find_if(booksInGenre.begin(),booksInGenre.end(),
-        [&title](const Book& b) { return b.GetTitle() == title; });
+        [&title](Book& b) { return b.getTitle() == title; });
 
         if (it != booksInGenre.end()) {
             booksInGenre.erase(it);   //removes book is found
             return true;
         }
-        return false;                  //fails
+        return false;//fails
     }
     
 

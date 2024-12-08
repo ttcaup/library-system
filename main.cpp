@@ -1,6 +1,18 @@
 //main.cpp
+#include <iostream>
+#include <string>
+#include "Book.h"
+#include "LibraryManager.h"
+#include "User.h"
+
 int main(int argc, char const *argv[])
 {
+
+    
+    LibraryManager lib = LibraryManager();
+    Book twilight = Book("Twilight", "idk", "Fantasy");
+    lib.AddBookToLibrary(twilight);
+
     //populate books //J
     unordered_map<string, vector<string>> genreToTitles = {
         {"Mystery", {"M1", "M2", "M3", "M4", "M5"}}, {"Romance", {"R1", "R2", "R3", "R4", "R5"}},
@@ -11,7 +23,7 @@ int main(int argc, char const *argv[])
     for (const auto& [genre, titles] : genreToTitles) { //looks through,iterates, thorugh genres and books
         for (const auto& title : titles) {
             // Create a new book with the current title and genre
-            Book book(title, genre);
+            Book book(title, genre); 
 
             // Add the book to the library
             library.AddBookToLibrary(book);
