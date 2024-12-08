@@ -16,6 +16,7 @@ private:
     int phoneNumber;
     string favGenre;
     vector<Book> books;
+
     
 public:
     User(string username, string first, int phone, string genre) {
@@ -29,27 +30,50 @@ public:
     string GetUsername(){
         return userName;
     }
-    void CheckOutBook(Book book) {
-        books.push_back(book);
+    void addBook(Book book) {
+        int left = 0;
+        int right = books.size();
+
+        // Perform binary search to find the correct position
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (books[mid].getTitle() < book.getTitle()) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        books.insert(books.begin() + left, book);
     }
 
-    bool ReturnBook(Book book){
+    bool removeBook(Book book){
         books.erase(find(books.begin(), books.end(), book));
         return true;
     }
 
-    string GetFirst() {
+    string getFirst() {
         return firstName;
     }
-    int GetPhone() {
+    int getPhone() {
         return phoneNumber;
     }
-    string GetGenre() {
+    string getGenre() {
         return favGenre;
     }
 
-    void SetGenre(string genre){
+    void setGenre(string genre){
         favGenre = genre;
+    }
+    bool bookCheck(Book book){
+        auto it = find(books.begin(), books.end(), book);
+        if (it == books.end()){
+            return false;
+        }
+        else 
+            return true;
+    }
+    vector<Book> getUserBooks(){
+        return books;
     }
 };
 

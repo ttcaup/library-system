@@ -18,6 +18,16 @@ int main(int argc, char const *argv[])
         }
     }
 
+
+    LibraryManager lib = LibraryManager();
+    book1 twilight
+    lib.addBookToInventory(book1)
+    book2 twilight2
+    book3 twilight3
+
+    user eden
+    user matt
+
     //and users //E
 
     

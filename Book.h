@@ -26,22 +26,22 @@ public:
         this->genre = genre;
         status = true;
     }
-    string GetTitle() {
+    string getTitle() {
         return title;
     }
-    string GetAuthor() {
+    string getAuthor() {
         return author;
     }
-    string GetGenre() {
+    string getGenre() {
         return genre;
     }
-    int GetStatus() {
+    int getStatus() {
         return status;
     }
-    void SetStatus(bool status) {
+    void setStatus(bool status) {
         this->status = status;
     }
-    void PrintBookInfo() {
+    void printBookInfo() {
         cout << "Book Info" << endl;//need to do
     }
 
