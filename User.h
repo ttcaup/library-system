@@ -13,23 +13,18 @@ class User {
 private:
     string userName;
     string firstName;
-    int phoneNumber;
     string favGenre;
     vector<Book> books;
 
     
 public:
-    User(string username, string first, int phone, string genre) {
+    User(string username, string first, string genre) {
         userName = username;
         firstName = first;
-        phoneNumber = phone;
         favGenre = genre;
         books = {};
     }
 
-    string GetUsername(){
-        return userName;
-    }
     void addBook(Book book) {
         int left = 0;
         int right = books.size();
@@ -46,24 +41,33 @@ public:
         books.insert(books.begin() + left, book);
     }
 
-    bool removeBook(Book book){
-        books.erase(find(books.begin(), books.end(), book));
-        return true;
+    bool removeBook(Book book) {
+        auto it = find(books.begin(), books.end(), book);
+
+        if (it == books.end()) {
+            return false;
+        }
+        else {
+            books.erase(it);
+            return true;
+        }
+    }
+
+    string getUsername() {
+        return userName;
     }
 
     string getFirst() {
         return firstName;
     }
-    int getPhone() {
-        return phoneNumber;
-    }
+
     string getGenre() {
         return favGenre;
     }
 
-    void setGenre(string genre){
-        favGenre = genre;
-    }
+    // void setGenre(string genre){
+    //     favGenre = genre;
+    // }
     bool bookCheck(Book book){
         auto it = find(books.begin(), books.end(), book);
         if (it == books.end()){

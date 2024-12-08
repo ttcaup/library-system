@@ -10,7 +10,6 @@ using namespace std;
 
 class Book {
 private:
-    int isbn;
     string title;
     string author;
     string genre;
