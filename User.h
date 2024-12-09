@@ -14,15 +14,13 @@ class User {
 private:
     string userName;
     string firstName;
-    string favGenre;
     vector<Book> books;
 
 
 public:
-    User(string username, string first, string genre) {
+    User(string username, string first) {
         userName = username;
         firstName = first;
-        favGenre = genre;
         books = {};
     }
 
@@ -60,14 +58,7 @@ bool removeBook(const Book& book) {
     string getFirst() const {
         return firstName;
     }
-
-    string getGenre() const {
-        return favGenre;
-    }
-
-    // void setGenre(string genre){
-    //     favGenre = genre;
-    // }
+    
     bool bookCheck(const Book& book) const {
         auto it = find(books.begin(), books.end(), book);  // This uses operator== to compare books
         return it != books.end();

@@ -45,9 +45,8 @@ public:
 
     void PrintUserInfo(const User& user) const {
         cout << "Name: " << user.getFirst() << endl;
-        cout << "Favorite Genre: " << user.getGenre() << endl;
         //print out list of books
-        cout<< "Your Books: " << "\n" << endl;
+        cout<< "Your Books: "<<endl;
         for (const Book& book : user.getUserBooks()) {
             cout << book.getTitle() << endl;
         }

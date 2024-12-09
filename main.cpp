@@ -20,10 +20,11 @@ using namespace std;
 
 string getGenreChoice() {
     int genreChoice;
-    cout << "\nChoose genre by entering the corresponding number:\n";
-    cout << "1. Fantasy\n2. Romance\n3. Mystery\n4. Horror\n5. Science Fiction\n\n6. Go back to menu\n";
-    cout << "\nEnter your choice (1-6): ";
+    
     while (true) {
+        cout << "\nChoose genre by entering the corresponding number:\n";
+        cout << "1. Fantasy\n2. Romance\n3. Mystery\n4. Horror\n5. Science Fiction\n6. RETURN TO MENU\n";
+        cout << "\nEnter your choice (1-6): ";
         cin >> genreChoice;
         switch (genreChoice) {
             case 1: return "Fantasy";
@@ -42,25 +43,115 @@ string getGenreChoice() {
 
 Book* getBookChoice(vector<Book>& books) {
     int bookChoice;
-    cout << "Select book by entering the corresponding number:\n";
-    
-    for(int i = 0; i < books.size(); i++){
-        cout << i+1 << ") " << books[i].getTitle() << " by " << books[i].getAuthor() << endl;
-    }
-    cout << "\n6) Go back to menu";
-    cout << "\nEnter your choice (1-6): ";
-    cin >> bookChoice;
-    
-    while (bookChoice < 1 && bookChoice > 6) {
-        cout << "\nInvalid choice!" << endl;
-        cout << "\nEnter your choice (1-5): ";
+    bool loop = true;
+    int listSize = books.size();
+
+    while(loop) {
+        loop = false;
+        cout << "\nSelect book by entering the corresponding number:\n";
+        
+        for(int i = 0; i < listSize; i++){
+            cout << i+1 << ". " << books[i].getTitle() << " by " << books[i].getAuthor() << endl;
+        }
+        cout << listSize << ". RETURN TO MENU";
+        cout << "\n\nEnter your choice (1-" << listSize << "): ";
         cin >> bookChoice;
+        
+        if (bookChoice < 1 || bookChoice > listSize) {
+            cout << "\nInvalid choice!" << endl;
+            loop = true;
+        }
     }
 
-    if (bookChoice == 6)
+    if (bookChoice == listSize)
         return nullptr;
     else
         return &books[bookChoice-1];
+}
+
+bool mainMenu(LibraryManager& lib, User* selectedUser) {
+//------------------Main Menu------------------------//
+
+    int menuOpt;
+    cout << "\n-----------Menu----------" << endl;
+    cout << "\nWhat would you like to do?" << endl;;
+    cout << "1. Checkout a book\n2. Return a book\n3. Enter/Check Waitlist \n4. Account Info\n5. Log Out" << endl;
+    cout << "\nEnter your choice (1-5): ";
+    cin >> menuOpt;
+
+    //checkout book
+    if(menuOpt == 1) {
+        string genre = getGenreChoice();
+
+        if (genre == "QUIT")
+            return true;
+        
+        // get books by genre
+        vector<Book> selectedBooks = lib.getBooksByGenre(genre);
+        
+        // prompt user to pick book, or go back to main menu
+        Book* chosenOne = getBookChoice(selectedBooks);
+        if (chosenOne == nullptr)
+            return true;
+
+        if (!lib.checkOutBook(*chosenOne,selectedUser)) {
+            cout << "\nBook Unavailable, checked out by another human.\n" << endl << endl;
+        }
+    }
+    
+    else if(menuOpt == 2) {
+        // get vector of user books
+        vector<Book> usersBook = selectedUser->getUserBooks();
+
+        // prompt user to pick book, or go back to main menu
+        Book* chosenOne = getBookChoice(usersBook);
+        if (chosenOne == nullptr)
+            return true;
+        
+        if(! lib.returnBook(*chosenOne, selectedUser)){
+            cout<<"\nLooks like you do not have this book...\n"<<endl;
+        }
+        else{
+            cout<< "\nYour book was successfully returned!\n"<<endl;
+        }
+        
+    }
+    else if (menuOpt == 3)// Enter/check waitlist
+    {
+        cout<<"Join OR Check waitlist "<< endl;
+        
+        if(lib.checkWaitlist(*selectedUser)== -1){
+            lib.joinWaitlist(*selectedUser);
+            cout << "\nYou have joined the waitlist to meet" << endl;
+            cout << "Professor Mortezie and Edward Cullen!\n" << endl;
+            cout<< "You are Position #"<<lib.checkWaitlist(*selectedUser);
+            cout<<" in the waitlist!"<<endl;
+        }
+        
+        else{
+            cout<< "You are Position #"<<lib.checkWaitlist(*selectedUser);
+            cout<<" in the waitlist!"<<endl;
+        }
+    }
+    //account info
+    else if (menuOpt == 4)
+    {
+        cout << "\n-----Your Account Info-----"<< endl;
+        lib.PrintUserInfo(*selectedUser);
+    }
+
+    //logout
+    else if (menuOpt == 5)
+    {
+        //log out
+        return false;
+    }
+    else
+    {
+        cout << "\nInvalid choice. Please enter a number between 1 and 5.\n";
+    }
+    return true;
+//------------------end Menu------------------------//
 }
 
 int main(int argc, char const *argv[])
@@ -117,9 +208,9 @@ int main(int argc, char const *argv[])
     lib.AddBookToLibrary(frankenstein);
 
     //and users 
-    User Eden("eread", "Eden", "Romance" );
-    User Jasmine("jamontoast", "Jasmine", "Fantasy");
-    User Matthew("loco4cocoa", "Matthew", "Science Fiction");
+    User Eden("eread", "Eden");
+    User Jasmine("jamontoast", "Jasmine");
+    User Matthew("loco4cocoa", "Matthew");
 
     lib.AddUserToLibrary(Eden);
     lib.AddUserToLibrary(Jasmine);
@@ -144,10 +235,7 @@ int main(int argc, char const *argv[])
             cout << "What is your first name: " <<endl;
             string firstName;
             cin >> firstName;
-            
-            cout << "\nLet's find your favorite genre!" << endl;
-            string favGenre = getGenreChoice(); //gets their fav genre! 
-            selectedUser = new User(userName, firstName, favGenre);
+            selectedUser = new User(userName, firstName);
             lib.AddUserToLibrary(*selectedUser);
         }
         else {
@@ -156,86 +244,11 @@ int main(int argc, char const *argv[])
         //-------------end opening scene-------------------//
 
         //---------------------Menu------------------------//
-        while(true) {
-            int menuOpt;
-            cout << "\n\n----dhfjsdhf-------Menu----------" << endl;
-            cout << "\nWhat would you like to do?" << endl;;
-            cout << "1. Checkout a book\n2. Return a book\n3. Enter/Check Waitlist \n4. Account Info\n5. Log Out" << endl;
-            cout << "\nEnter your choice (1-5): ";
-            cin >> menuOpt;
-
-            //checkout book
-            if(menuOpt == 1){
-                string genre = getGenreChoice();
-
-                if (genre == "QUIT")
-                    break;
-
-                vector<Book> selectedBooks = lib.getBooksByGenre(genre);
-                
-                if (getBookChoice(selectedBooks) == nullptr)
-                    break;
-
-                Book chosenOne = *getBookChoice(selectedBooks);
-                if (!lib.checkOutBook(chosenOne,selectedUser)) {
-                    cout << "\nBook Unavailable, checked out by another human.\n" << endl << endl;
-                }
-            }
-            
-            else if(menuOpt == 2){
-                vector <Book> usersBook = selectedUser->getUserBooks();
-                if (getBookChoice(usersBook) == nullptr)
-                    break;
-                
-                Book chosenOne = *getBookChoice(usersBook);
-                if(! lib.returnBook(chosenOne, selectedUser)){
-                    cout<<"\nLooks like you do not have this book...\n"<<endl;
-                }
-                else{
-                    cout<< "\nYour book was successfully returned!\n"<<endl;
-                }
-                
-            }
-            else if (menuOpt == 3)// Enter/check waitlist
-            {
-                cout<<"Join OR Check waitlist "<< endl;
-                
-                if(lib.checkWaitlist(*selectedUser)== -1){
-                    lib.joinWaitlist(*selectedUser);
-                    cout << "\nYou have joined the waitlist to meet" << endl;
-                    cout << "Professor Mortezie and Edward Cullen!\n" << endl;
-                    cout<< "You are Position #"<<lib.checkWaitlist(*selectedUser);
-                    cout<<" in the waitlist!"<<endl;
-                }
-                
-                else{
-                    cout<< "You are Position #"<<lib.checkWaitlist(*selectedUser);
-                    cout<<" in the waitlist!"<<endl;
-                }
-            }
-            //account info
-            else if (menuOpt == 4)
-            {
-                cout << "Your Account Info: "<< endl;
-                lib.PrintUserInfo(*selectedUser);
-            }
-            //logout
-            else if (menuOpt == 5)
-            {
-                //log out
-                break;
-                
-            }
-            else {
-                cout << "\nInvalid choice. Please enter a number between 1 and 4.";
-            }
+        bool opt = true;
+        while(opt) {
+            opt = mainMenu(lib, selectedUser);
         }
-        
-        //------------------end Menu------------------------//
     }
-
-    //list genre recs based on selected genre 1-5 
-
     return 0;
 }
 
