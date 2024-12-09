@@ -46,9 +46,15 @@ public:
     void PrintUserInfo(const User& user) {
         cout << "Name: " << user.getFirst() << endl;
         //print out list of books
-        cout << "Your Books: " << endl;
-        for (const Book& book : user.getUserBooks()) {
-            cout << book.getTitle() << endl;
+        if (user.getUserBooks().size() == 0) {
+            cout << "You currently have no books.\n\n";
+        }
+        else {
+            cout << "Your Books: " << endl;
+            for (const Book& book : user.getUserBooks()) {
+                cout << book.getTitle() << endl;
+            }
+            cout << "\n\n";
         }
 
     }
