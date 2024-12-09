@@ -4,8 +4,7 @@
 Library System
 
 Course:  CMPE 126
-Authors: Eden Reader
-         Jasmine Kurian
+Authors: Eden Reader, Jasmine Kurian
 
 */
 #include <iostream>
@@ -14,8 +13,6 @@ Authors: Eden Reader
 #include "LibraryManager.h"
 #include "User.h"
 
-#include <iostream>
-#include <string>
 using namespace std;
 
 string getGenreChoice() {
@@ -57,19 +54,19 @@ Book* getBookChoice(vector<Book>& books) {
         cout << "\n\nEnter your choice (1-" << listSize << "): ";
         cin >> bookChoice;
         
-        if (bookChoice < 1 || bookChoice > listSize) {
+        if (bookChoice < 1 || bookChoice > listSize+1) {
             cout << "\nInvalid choice!" << endl;
             loop = true;
         }
     }
 
-    if (bookChoice == listSize)
+    if (bookChoice == listSize+1)
         return nullptr;
     else
         return &books[bookChoice-1];
 }
 
-bool mainMenu(LibraryManager& lib, User* selectedUser) {
+bool mainMenu(LibraryManager& lib, User& selectedUser) {
 //------------------Main Menu------------------------//
 
     int menuOpt;
@@ -94,21 +91,25 @@ bool mainMenu(LibraryManager& lib, User* selectedUser) {
         if (chosenOne == nullptr)
             return true;
 
-        if (!lib.checkOutBook(*chosenOne,selectedUser)) {
+        if (!lib.checkOutBook(*chosenOne, selectedUser)) {
             cout << "\nBook Unavailable, checked out by another human.\n" << endl << endl;
         }
     }
     
     else if(menuOpt == 2) {
         // get vector of user books
-        vector<Book> usersBook = selectedUser->getUserBooks();
+        vector<Book> usersBook = selectedUser.getUserBooks();
+        if(usersBook.size() == 0) {
+            cout << "\nYou have no books. :((()" << endl;
+            return true;
+        }
 
         // prompt user to pick book, or go back to main menu
         Book* chosenOne = getBookChoice(usersBook);
         if (chosenOne == nullptr)
             return true;
         
-        if(! lib.returnBook(*chosenOne, selectedUser)){
+        if(! lib.returnBook(*chosenOne, &selectedUser)){
             cout<<"\nLooks like you do not have this book...\n"<<endl;
         }
         else{
@@ -118,26 +119,30 @@ bool mainMenu(LibraryManager& lib, User* selectedUser) {
     }
     else if (menuOpt == 3)// Enter/check waitlist
     {
-        cout<<"Join OR Check waitlist "<< endl;
-        
-        if(lib.checkWaitlist(*selectedUser)== -1){
-            lib.joinWaitlist(*selectedUser);
+        cout<<"\nJoin OR Check waitlist "<< endl;
+        if(lib.checkWaitlist(selectedUser) == -1){
+            lib.joinWaitlist(selectedUser);
             cout << "\nYou have joined the waitlist to meet" << endl;
             cout << "Professor Mortezie and Edward Cullen!\n" << endl;
-            cout<< "You are Position #"<<lib.checkWaitlist(*selectedUser);
-            cout<<" in the waitlist!"<<endl;
+            cout<< "--You are Position #"<<lib.checkWaitlist(selectedUser);
+            cout<<" in the waitlist!--"<<endl;
         }
-        
-        else{
-            cout<< "You are Position #"<<lib.checkWaitlist(*selectedUser);
-            cout<<" in the waitlist!"<<endl;
+        else
+        {
+            cout<< "You are Position #" << lib.checkWaitlist(selectedUser);
+            cout<<" in the waitlist!--"<<endl;
+            if(lib.checkWaitlist(selectedUser) == 0){
+                cout<<"It's time to meet them!!! We are so excited for you <3"<<endl;
+                lib.exitWaitlist();
+            }
         }
     }
     //account info
     else if (menuOpt == 4)
     {
         cout << "\n-----Your Account Info-----"<< endl;
-        lib.PrintUserInfo(*selectedUser);
+        
+        lib.PrintUserInfo(selectedUser);
     }
 
     //logout
@@ -156,29 +161,45 @@ bool mainMenu(LibraryManager& lib, User* selectedUser) {
 
 int main(int argc, char const *argv[])
 {
+    // ------------------- initialize and fill the library with presets! ------------------------- //
     LibraryManager lib = LibraryManager();
 
     //Fantasy
-    lib.AddBookToLibrary(Book("Harry Potter", "J.K. Rowling", "Fantasy"));
-    lib.AddBookToLibrary(Book("Eldest", "Christopher Paolini", "Fantasy"));
-    lib.AddBookToLibrary(Book("Uprooted", "Naomi Novik", "Fantasy"));
-    lib.AddBookToLibrary(Book("Eragon", "Christopher Paolini", "Fantasy"));
-    lib.AddBookToLibrary(Book("Mistborn", "Brandon Sanderson", "Fantasy"));
+    Book harry("Harry Potter", "J.K. Rowling", "Fantasy");
+    Book eldest("Eldest", "Christopher Paolini", "Fantasy");
+    Book uprooted("Uprooted", "Naomi Novik", "Fantasy");
+    Book eragon("Eragon", "Christopher Paolini", "Fantasy");
+    Book mistborn("Mistborn", "Brandon Sanderson", "Fantasy");
+    lib.AddBookToLibrary(harry);
+    lib.AddBookToLibrary(eldest);
+    lib.AddBookToLibrary(uprooted);
+    lib.AddBookToLibrary(eragon);
+    lib.AddBookToLibrary(mistborn);
 
     //Romance
-    lib.AddBookToLibrary(Book("Twilight", "Stephenie Meyer", "Romance"));
-    lib.AddBookToLibrary(Book("Eleanor", "Rainbow Rowell", "Romance"));
-    lib.AddBookToLibrary(Book("Outlander", "Diana Gabaldon", "Romance"));
-    lib.AddBookToLibrary(Book("After", "Anna Todd", "Romance"));
-    lib.AddBookToLibrary(Book("Fifty Shades of Grey", "E.L. James", "Romance"));
+    Book Twilight("Twilight", "Stephenie Meyer", "Romance");
+    Book Eleanor("Eleanor", "Rainbow Rowell", "Romance");
+    Book Outlander("Outlander", "Diana Gabaldon", "Romance");
+    Book fifty("Fifty Shades of Grey", "E.L. James", "Romance");
+    Book After("After", "Anna Todd", "Romance");
+    lib.AddBookToLibrary(Twilight);
+    lib.AddBookToLibrary(Eleanor);
+    lib.AddBookToLibrary(Outlander);
+    lib.AddBookToLibrary(After);
+    lib.AddBookToLibrary(fifty);
 
     //Mystery
-    lib.AddBookToLibrary(Book("Sherlock", "Arthur Conan Doyle", "Mystery"));
-    lib.AddBookToLibrary(Book("Gone", "Gillian Flynn", "Mystery"));
-    lib.AddBookToLibrary(Book("Innocent", "Scott Turow", "Mystery"));
-    lib.AddBookToLibrary(Book("Sharp", "Gillian Flynn", "Mystery"));
-    lib.AddBookToLibrary(Book("Rogue", "Ruth Ware", "Mystery"));
-
+    Book Sherlock("Sherlock", "Arthur Conan Doyle", "Mystery");
+    Book Gone("Gone", "Gillian Flynn", "Mystery");
+    Book Innocent("Innocent", "Scott Turow", "Mystery");
+    Book Sharp("Sharp", "Gillian Flynn", "Mystery");
+    Book Rogue("Rogue", "Ruth Ware", "Mystery");
+    lib.AddBookToLibrary(Sherlock);
+    lib.AddBookToLibrary(Gone);
+    lib.AddBookToLibrary(Innocent);
+    lib.AddBookToLibrary(Sharp);
+    lib.AddBookToLibrary(Rogue);
+    
     //Science Fiction
     Book dune("Dune", "Frank Herbert", "Science Fiction"); 
     Book ender("Ender's Game", "Orson Scott Card", "Science Fiction"); 
@@ -186,7 +207,6 @@ int main(int argc, char const *argv[])
     Book foundation("Foundation", "Isaac Asimov", "Science Fiction"); 
     Book hyperion("Hyperion", "Dan Simmons", "Science Fiction"); 
 
-    //Add books to library
     lib.AddBookToLibrary(dune);
     lib.AddBookToLibrary(ender);
     lib.AddBookToLibrary(neuromancer);
@@ -200,7 +220,6 @@ int main(int argc, char const *argv[])
     Book birdbox("Birdbox", "Josh Malerman", "Horror"); 
     Book frankenstein("Frankenstein", "Mary Shelley", "Horror"); 
 
-    //Add books to library
     lib.AddBookToLibrary(carrie);
     lib.AddBookToLibrary(it);
     lib.AddBookToLibrary(dracula);
@@ -211,24 +230,42 @@ int main(int argc, char const *argv[])
     User Eden("eread", "Eden");
     User Jasmine("jamontoast", "Jasmine");
     User Matthew("loco4cocoa", "Matthew");
-
-    lib.AddUserToLibrary(Eden);
-    lib.AddUserToLibrary(Jasmine);
-    lib.AddUserToLibrary(Matthew);
     
-    //lib.printUserList();
+    //add users to library
+    lib.AddUserToLibrary(&Eden);
+    lib.AddUserToLibrary(&Jasmine);
+    lib.AddUserToLibrary(&Matthew);
 
-   
+    //adding users to waitlist
+    lib.joinWaitlist(Eden);
+    lib.joinWaitlist(Jasmine);
+    lib.joinWaitlist(Matthew);
+
+    //adding books to users
+    lib.checkOutBook(Twilight, Matthew);
+    lib.checkOutBook(dracula, Jasmine);
+    lib.checkOutBook(Rogue, Jasmine);
+    lib.checkOutBook(dune, Eden);
+    lib.checkOutBook(Outlander, Eden);
+
+
+    cout << "testing stuff" << endl;
+    lib.PrintUserInfo(Eden);
+    cout << endl;
+    
+    bool isUserNew = false;
+    User* selectedUser;
+    
     while (true)
     {
         //----------------opening scene-------------------//
-        cout << "-------------------------------------" << endl;
-        cout << "Welcome to Reader & Kurian's Emporium"<< endl;
-        cout << "-------------------------------------" << endl;
-        cout << "\nEnter Username: "<<endl;
+        cout << "---------------------------------------------" << endl;
+        cout << "Welcome to Reader & Kurian's Library Emporium"<< endl;
+        cout << "---------------------------------------------" << endl;
+        cout << "\nEnter Username: "<< endl;
         string userName;
         cin >> userName;
-        User* selectedUser = lib.userInList(userName);
+        selectedUser = lib.userInList(userName);
         
         if (selectedUser == nullptr) {
             cout << "\nLet's make you an account!\n" <<endl;
@@ -236,7 +273,8 @@ int main(int argc, char const *argv[])
             string firstName;
             cin >> firstName;
             selectedUser = new User(userName, firstName);
-            lib.AddUserToLibrary(*selectedUser);
+            lib.AddUserToLibrary(selectedUser);
+            isUserNew = true;
         }
         else {
             cout << "\nWelcome back " << selectedUser->getFirst() << "!" <<endl;
@@ -246,9 +284,11 @@ int main(int argc, char const *argv[])
         //---------------------Menu------------------------//
         bool opt = true;
         while(opt) {
-            opt = mainMenu(lib, selectedUser);
+            opt = mainMenu(lib, *selectedUser);
         }
     }
+    
+    if(isUserNew) delete selectedUser;
     return 0;
 }
 

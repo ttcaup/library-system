@@ -17,7 +17,7 @@ private:
     map< Book , User* > inventory; //maps book to user
     map< string , vector <Book> > sortGenre;//maps genre to a list of books 
     deque<User> waitlist; 
-    vector<User> userList; //user database for login, local variable
+    vector<User*> userList; //user database for login, local variable
 
 public:
 
@@ -32,22 +32,24 @@ public:
     }
 
     User* userInList(string& userName) {
-        for( User& user : userList ) {
-            if (userName == user.getUsername())
-                return &user;
+        for( User* userptr : userList ) {
+            if (userName == userptr->getUsername())
+                return userptr;
         }
         return nullptr;
     }
 
-    void AddUserToLibrary(const User& user){
-        userList.push_back(user);
+    void AddUserToLibrary(User* userptr) {
+        userList.push_back(userptr);
     }
 
-    void PrintUserInfo(const User& user) const {
+    void PrintUserInfo(const User& user) {
         cout << "Name: " << user.getFirst() << endl;
         //print out list of books
-        cout<< "Your Books: "<<endl;
+        cout << "Your Books: " << endl;
+        cout << user.getUserBooks().size() << endl;
         for (const Book& book : user.getUserBooks()) {
+            cout << "test" << endl;
             cout << book.getTitle() << endl;
         }
 
@@ -60,13 +62,13 @@ public:
         inventory[book]=nullptr; //adds new book to inventory
     }
 
-    bool checkOutBook(Book& book, User* user){
+    bool checkOutBook(Book& book, User& user){
         if (inventory[book] != nullptr){ //already in someone elses hands 
             return false;
         }
         else {
-            user->addBook(book);
-            inventory[book] = user; //updated the inventory
+            user.addBook(book);
+            inventory[book] = &user; //updated the inventory
             book.setStatus(false); // book is now not available
             return true;
         }
