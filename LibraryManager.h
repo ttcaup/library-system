@@ -47,9 +47,7 @@ public:
         cout << "Name: " << user.getFirst() << endl;
         //print out list of books
         cout << "Your Books: " << endl;
-        cout << user.getUserBooks().size() << endl;
         for (const Book& book : user.getUserBooks()) {
-            cout << "test" << endl;
             cout << book.getTitle() << endl;
         }
 

@@ -50,8 +50,8 @@ Book* getBookChoice(vector<Book>& books) {
         for(int i = 0; i < listSize; i++){
             cout << i+1 << ". " << books[i].getTitle() << " by " << books[i].getAuthor() << endl;
         }
-        cout << listSize << ". RETURN TO MENU";
-        cout << "\n\nEnter your choice (1-" << listSize << "): ";
+        cout << listSize+1 << ". RETURN TO MENU";
+        cout << "\n\nEnter your choice (1-" << listSize+1 << "): ";
         cin >> bookChoice;
         
         if (bookChoice < 1 || bookChoice > listSize+1) {
@@ -247,11 +247,6 @@ int main(int argc, char const *argv[])
     lib.checkOutBook(Rogue, Jasmine);
     lib.checkOutBook(dune, Eden);
     lib.checkOutBook(Outlander, Eden);
-
-
-    cout << "testing stuff" << endl;
-    lib.PrintUserInfo(Eden);
-    cout << endl;
     
     bool isUserNew = false;
     User* selectedUser;

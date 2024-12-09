@@ -16,7 +16,6 @@ private:
     string firstName;
     vector<Book> books;
 
-
 public:
     User(string username, string first) {
         userName = username;
@@ -71,6 +70,5 @@ bool removeBook(const Book& book) {
         return this->userName == other.getUsername();
     }
 };
-
 
 #endif
