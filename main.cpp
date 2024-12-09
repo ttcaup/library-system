@@ -21,8 +21,8 @@ using namespace std;
 string getGenreChoice() {
     int genreChoice;
     cout << "\nChoose genre by entering the corresponding number:\n";
-    cout << "1. Fantasy\n2. Romance\n3. Mystery\n4. Horror\n5. Science Fiction\n";
-    cout << "\nEnter your choice (1-5): ";
+    cout << "1. Fantasy\n2. Romance\n3. Mystery\n4. Horror\n5. Science Fiction\n\n6. Go back to menu\n";
+    cout << "\nEnter your choice (1-6): ";
     while (true) {
         cin >> genreChoice;
         switch (genreChoice) {
@@ -31,31 +31,36 @@ string getGenreChoice() {
             case 3: return "Mystery";
             case 4: return "Horror";
             case 5: return "Science Fiction";
+            case 6: return "QUIT";
             default:
                 cout << "\nInvalid choice!" << endl;
-                cout << "\nEnter your choice (1-5): ";
+                cout << "\nEnter your choice (1-6): ";
                 break;
         }
     }
 }
 
-Book getBookChoice(vector<Book>& books) {
+Book* getBookChoice(vector<Book>& books) {
     int bookChoice;
     cout << "Select book by entering the corresponding number:\n";
-
+    
     for(int i = 0; i < books.size(); i++){
-        cout << i+1 << ") " << books[i].getTitle() << " by " << books[i].getAuthor() <<endl;
+        cout << i+1 << ") " << books[i].getTitle() << " by " << books[i].getAuthor() << endl;
     }
-    cout << "\nEnter your choice (1-5): ";
+    cout << "\n6) Go back to menu";
+    cout << "\nEnter your choice (1-6): ";
     cin >> bookChoice;
     
-    while (bookChoice < 1 && bookChoice > 5) {
+    while (bookChoice < 1 && bookChoice > 6) {
         cout << "\nInvalid choice!" << endl;
         cout << "\nEnter your choice (1-5): ";
         cin >> bookChoice;
     }
 
-    return books[bookChoice-1];
+    if (bookChoice == 6)
+        return nullptr;
+    else
+        return &books[bookChoice-1];
 }
 
 int main(int argc, char const *argv[])
@@ -63,44 +68,25 @@ int main(int argc, char const *argv[])
     LibraryManager lib = LibraryManager();
 
     //Fantasy
-    Book eldest("Eldest", "Christopher Paolini", "Fantasy"); 
-    Book uprooted("Uprooted", "Naomi Novik", "Fantasy"); 
-    Book eragon("Eragon", "Christopher Paolini", "Fantasy"); 
-    Book mistborn("Mistborn", "Brandon Sanderson", "Fantasy"); 
-
-    //Add books to library
-    lib.AddBookToLibrary(eldest);
-    lib.AddBookToLibrary(uprooted);
-    lib.AddBookToLibrary(eragon);
-    lib.AddBookToLibrary(mistborn);
+    lib.AddBookToLibrary(Book("Harry Potter", "J.K. Rowling", "Fantasy"));
+    lib.AddBookToLibrary(Book("Eldest", "Christopher Paolini", "Fantasy"));
+    lib.AddBookToLibrary(Book("Uprooted", "Naomi Novik", "Fantasy"));
+    lib.AddBookToLibrary(Book("Eragon", "Christopher Paolini", "Fantasy"));
+    lib.AddBookToLibrary(Book("Mistborn", "Brandon Sanderson", "Fantasy"));
 
     //Romance
-    Book twilight("Twilight", "Stephenie Meyer", "Romance"); 
-    Book eleanor("Eleanor", "Rainbow Rowell", "Romance"); 
-    Book outlander("Outlander", "Diana Gabaldon", "Romance"); 
-    Book after("After", "Anna Todd", "Romance"); 
-    Book fiftyShades("Fifty Shades of Grey", "E.L. James", "Romance"); 
-
-    //Add books to library
-    lib.AddBookToLibrary(twilight);
-    lib.AddBookToLibrary(eleanor);
-    lib.AddBookToLibrary(outlander);
-    lib.AddBookToLibrary(after);
-    lib.AddBookToLibrary(fiftyShades);
+    lib.AddBookToLibrary(Book("Twilight", "Stephenie Meyer", "Romance"));
+    lib.AddBookToLibrary(Book("Eleanor", "Rainbow Rowell", "Romance"));
+    lib.AddBookToLibrary(Book("Outlander", "Diana Gabaldon", "Romance"));
+    lib.AddBookToLibrary(Book("After", "Anna Todd", "Romance"));
+    lib.AddBookToLibrary(Book("Fifty Shades of Grey", "E.L. James", "Romance"));
 
     //Mystery
-    Book sherlock("Sherlock", "Arthur Conan Doyle", "Mystery"); 
-    Book gone("Gone", "Gillian Flynn", "Mystery"); 
-    Book innocent("Innocent", "Scott Turow", "Mystery"); 
-    Book sharp("Sharp", "Gillian Flynn", "Mystery"); 
-    Book rogue("Rogue", "Ruth Ware", "Mystery"); 
-
-    //Add books to library
-    lib.AddBookToLibrary(sherlock);
-    lib.AddBookToLibrary(gone);
-    lib.AddBookToLibrary(innocent);
-    lib.AddBookToLibrary(sharp);
-    lib.AddBookToLibrary(rogue);
+    lib.AddBookToLibrary(Book("Sherlock", "Arthur Conan Doyle", "Mystery"));
+    lib.AddBookToLibrary(Book("Gone", "Gillian Flynn", "Mystery"));
+    lib.AddBookToLibrary(Book("Innocent", "Scott Turow", "Mystery"));
+    lib.AddBookToLibrary(Book("Sharp", "Gillian Flynn", "Mystery"));
+    lib.AddBookToLibrary(Book("Rogue", "Ruth Ware", "Mystery"));
 
     //Science Fiction
     Book dune("Dune", "Frank Herbert", "Science Fiction"); 
@@ -181,8 +167,16 @@ int main(int argc, char const *argv[])
             //checkout book
             if(menuOpt == 1){
                 string genre = getGenreChoice();
+
+                if (genre == "QUIT")
+                    break;
+
                 vector<Book> selectedBooks = lib.getBooksByGenre(genre);
-                Book chosenOne = getBookChoice(selectedBooks);
+                
+                if (getBookChoice(selectedBooks) == nullptr)
+                    break;
+
+                Book chosenOne = *getBookChoice(selectedBooks);
                 if (!lib.checkOutBook(chosenOne,selectedUser)) {
                     cout << "\nBook Unavailable, checked out by another human.\n" << endl << endl;
                 }
@@ -190,7 +184,10 @@ int main(int argc, char const *argv[])
             
             else if(menuOpt == 2){
                 vector <Book> usersBook = selectedUser->getUserBooks();
-                Book chosenOne = getBookChoice(usersBook);
+                if (getBookChoice(usersBook) == nullptr)
+                    break;
+                
+                Book chosenOne = *getBookChoice(usersBook);
                 if(! lib.returnBook(chosenOne, selectedUser)){
                     cout<<"\nLooks like you do not have this book...\n"<<endl;
                 }
@@ -199,21 +196,28 @@ int main(int argc, char const *argv[])
                 }
                 
             }
-            else if (menuOpt == 3)//Enter/check waitlist
+            else if (menuOpt == 3)// Enter/check waitlist
             {
-                //enter waitlist
-                lib.joinWaitlist(selectedUser);
-                cout << "You have joined the waitlist!" << endl;
-
-                //check your position in wiatlist
-                lib.checkWaitlist(selectedUser);
-
+                cout<<"Join OR Check waitlist "<< endl;
+                
+                if(lib.checkWaitlist(*selectedUser)== -1){
+                    lib.joinWaitlist(*selectedUser);
+                    cout << "\nYou have joined the waitlist to meet" << endl;
+                    cout << "Professor Mortezie and Edward Cullen!\n" << endl;
+                    cout<< "You are Position #"<<lib.checkWaitlist(*selectedUser);
+                    cout<<" in the waitlist!"<<endl;
+                }
+                
+                else{
+                    cout<< "You are Position #"<<lib.checkWaitlist(*selectedUser);
+                    cout<<" in the waitlist!"<<endl;
+                }
             }
             //account info
             else if (menuOpt == 4)
             {
-                cout << "Your Account Info: " << selectedUser->PrintUserInfo() << endl; 
-                
+                cout << "Your Account Info: "<< endl;
+                lib.PrintUserInfo(*selectedUser);
             }
             //logout
             else if (menuOpt == 5)
@@ -222,14 +226,13 @@ int main(int argc, char const *argv[])
                 break;
                 
             }
-            else{
+            else {
                 cout << "\nInvalid choice. Please enter a number between 1 and 4.";
             }
         }
         
         //------------------end Menu------------------------//
     }
-    
 
     //list genre recs based on selected genre 1-5 
 

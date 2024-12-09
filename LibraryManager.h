@@ -16,7 +16,7 @@ class LibraryManager {
 private:
     map< Book , User* > inventory; //maps book to user
     map< string , vector <Book> > sortGenre;//maps genre to a list of books 
-    deque <User*> waitlist; 
+    deque<User> waitlist; 
     vector<User> userList; //user database for login, local variable
 
 public:
@@ -48,12 +48,12 @@ public:
         cout << "Favorite Genre: " << user.getGenre() << endl;
         //print out list of books
         cout<< "Your Books: " << "\n" << endl;
-        for (Book&book : user.getUserBooks()) {
-            ///finish
+        for (const Book& book : user.getUserBooks()) {
+            cout << book.getTitle() << endl;
         }
 
-        }
-        
+    }
+
     void AddBookToLibrary(const Book& book) {
         string genre = book.getGenre(); // gets genre of book
         sortGenre[genre].push_back(book); // adds book to the specific genre's list
@@ -78,21 +78,23 @@ public:
             return false;
         }
         else {
-            user->removeBook(book);//updates user list
-            inventory[book] = nullptr;//updates inventory
+            user->removeBook(book); //updates user list
+            inventory[book] = nullptr; //updates inventory
             book.setStatus(true); //book is now available
             return true;
         }
     }
-
     //queue search alg for users position in waitlist //E
-     int checkWaitlist(User* user){
-        auto it = find(waitlist.begin(), waitlist.end(), &user);
+     int checkWaitlist(User& user) {
+        auto it = find(waitlist.begin(), waitlist.end(), user);
+        if (it == waitlist.end()) { //if not in the waitlist, return -1!
+            return -1;//not in the list
+        }
         return distance(waitlist.begin(), it);
      }
 
     //update waitlist? add to dequq push, remove from deque pop
-     bool joinWaitlist(User* user){
+     bool joinWaitlist(const User& user) {
          waitlist.push_back(user);
          return true;
      }
