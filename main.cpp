@@ -20,9 +20,9 @@ using namespace std;
 
 string getGenreChoice() {
     int genreChoice;
-    cout << "Choose genre by entering the corresponding number:\n";
+    cout << "\nChoose genre by entering the corresponding number:\n";
     cout << "1. Fantasy\n2. Romance\n3. Mystery\n4. Horror\n5. Science Fiction\n";
-    cout << "Enter your choice (1-5): ";
+    cout << "\nEnter your choice (1-5): ";
     while (true) {
         cin >> genreChoice;
         switch (genreChoice) {
@@ -32,8 +32,8 @@ string getGenreChoice() {
             case 4: return "Horror";
             case 5: return "Science Fiction";
             default:
-                cout << "Invalid choice!" << endl;
-                cout << "Enter your choice (1-5): ";
+                cout << "\nInvalid choice!" << endl;
+                cout << "\nEnter your choice (1-5): ";
                 break;
         }
     }
@@ -46,12 +46,12 @@ Book getBookChoice(vector<Book>& books) {
     for(int i = 0; i < books.size(); i++){
         cout << i+1 << ") " << books[i].getTitle() << " by " << books[i].getAuthor() <<endl;
     }
-    cout << "Enter your choice (1-5): ";
+    cout << "\nEnter your choice (1-5): ";
     cin >> bookChoice;
     
     while (bookChoice < 1 && bookChoice > 5) {
-        cout << "Invalid choice!" << endl;
-        cout << "Enter your choice (1-5): ";
+        cout << "\nInvalid choice!" << endl;
+        cout << "\nEnter your choice (1-5): ";
         cin >> bookChoice;
     }
 
@@ -138,39 +138,44 @@ int main(int argc, char const *argv[])
     lib.AddUserToLibrary(Eden);
     lib.AddUserToLibrary(Jasmine);
     lib.AddUserToLibrary(Matthew);
+    
+    //lib.printUserList();
+
    
     while (true)
     {
         //----------------opening scene-------------------//
-        cout << "Welcome to Reader & Kurian's Emporium"<<endl;
-        cout << "Enter Username: "<<endl;
+        cout << "-------------------------------------" << endl;
+        cout << "Welcome to Reader & Kurian's Emporium"<< endl;
+        cout << "-------------------------------------" << endl;
+        cout << "\nEnter Username: "<<endl;
         string userName;
         cin >> userName;
         User* selectedUser = lib.userInList(userName);
         
-        if (selectedUser == nullptr){
-            cout << "Let's make you an account!" <<endl;
+        if (selectedUser == nullptr) {
+            cout << "\nLet's make you an account!\n" <<endl;
             cout << "What is your first name: " <<endl;
             string firstName;
             cin >> firstName;
             
-            cout << "Let's find your favorite genre!" << endl;
+            cout << "\nLet's find your favorite genre!" << endl;
             string favGenre = getGenreChoice(); //gets their fav genre! 
             selectedUser = new User(userName, firstName, favGenre);
             lib.AddUserToLibrary(*selectedUser);
         }
         else {
-            cout << "Welcome back " << selectedUser->getFirst() << "!" <<endl;
+            cout << "\nWelcome back " << selectedUser->getFirst() << "!" <<endl;
         }
         //-------------end opening scene-------------------//
 
         //---------------------Menu------------------------//
         while(true) {
             int menuOpt;
-            cout << "--------Menu-------" << endl << endl;
-            cout << "What would you like to do?" << endl;;
+            cout << "\n\n----dhfjsdhf-------Menu----------" << endl;
+            cout << "\nWhat would you like to do?" << endl;;
             cout << "1. Checkout a book\n2. Return a book\n3. Enter/Check Waitlist \n4. Account Info\n5. Log Out" << endl;
-            cout << "Enter your choice (1-5): ";
+            cout << "\nEnter your choice (1-5): ";
             cin >> menuOpt;
 
             //checkout book
@@ -179,7 +184,7 @@ int main(int argc, char const *argv[])
                 vector<Book> selectedBooks = lib.getBooksByGenre(genre);
                 Book chosenOne = getBookChoice(selectedBooks);
                 if (!lib.checkOutBook(chosenOne,selectedUser)) {
-                    cout << "Book Unavailable, checked out by another human." << endl << endl;
+                    cout << "\nBook Unavailable, checked out by another human.\n" << endl << endl;
                 }
             }
             
@@ -187,24 +192,27 @@ int main(int argc, char const *argv[])
                 vector <Book> usersBook = selectedUser->getUserBooks();
                 Book chosenOne = getBookChoice(usersBook);
                 if(! lib.returnBook(chosenOne, selectedUser)){
-                    cout<<"Looks like you do not have this book..."<<endl;
+                    cout<<"\nLooks like you do not have this book...\n"<<endl;
                 }
                 else{
-                    cout<< "Your book was successfully returned!"<<endl;
+                    cout<< "\nYour book was successfully returned!\n"<<endl;
                 }
                 
             }
-            else if (menuOpt == 3)
+            else if (menuOpt == 3)//Enter/check waitlist
             {
-                //waitlist
-                
+                //enter waitlist
+                lib.joinWaitlist(selectedUser);
+                cout << "You have joined the waitlist!" << endl;
+
+                //check your position in wiatlist
+                lib.checkWaitlist(selectedUser);
+
             }
             //account info
             else if (menuOpt == 4)
             {
-                cout << "Username: " << selectedUser->getUsername() << endl; 
-                cout << "Name: " << selectedUser->getFirst() << endl; 
-                cout << "Favorite Genre: " << selectedUser->getGenre() << endl; 
+                cout << "Your Account Info: " << selectedUser->PrintUserInfo() << endl; 
                 
             }
             //logout
@@ -215,7 +223,7 @@ int main(int argc, char const *argv[])
                 
             }
             else{
-                cout << "Invalid choice. Please enter a number between 1 and 4.\n";
+                cout << "\nInvalid choice. Please enter a number between 1 and 4.";
             }
         }
         

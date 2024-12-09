@@ -44,9 +44,9 @@ public:
         this->status = status;
     }
   
-    void printBookInfo(Book book) {
-        cout << "Book Info" << endl;//need to do
-    }
+    // void printBookInfo(Book book) {
+    //     cout << "Book Info" << endl;//need to do
+    // }
     
     bool operator== (const Book& other) const {
         return this->title == other.getTitle() && this->author == other.getAuthor();

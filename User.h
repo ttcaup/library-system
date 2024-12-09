@@ -17,7 +17,7 @@ private:
     string favGenre;
     vector<Book> books;
 
-    
+
 public:
     User(string username, string first, string genre) {
         userName = username;
@@ -73,7 +73,7 @@ bool removeBook(const Book& book) {
         return it != books.end();
     }
 
-    const vector<Book>& getUserBooks() const{
+    const vector<Book>& getUserBooks() const {
         return books;
     }
     bool operator==(const User& other) const {

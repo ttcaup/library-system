@@ -16,43 +16,52 @@ class LibraryManager {
 private:
     map< Book , User* > inventory; //maps book to user
     map< string , vector <Book> > sortGenre;//maps genre to a list of books 
-    // deque <User*> waitlist; //
+    deque <User*> waitlist; 
     vector<User> userList; //user database for login, local variable
 
 public:
+
+    /*void printUserList() {
+    for (User &user : userList) {
+        cout << user.getUsername() << " ";
+     }
+    }*/
+   
     vector<Book> getBooksByGenre(string genre) {
         return sortGenre[genre];
     }
 
-    User* userInList(string userName) {
-        for( User user : userList ) {
-            if ( userName == user.getUsername())
+    User* userInList(string& userName) {
+        for( User& user : userList ) {
+            if (userName == user.getUsername())
                 return &user;
         }
         return nullptr;
     }
 
-    void AddUserToLibrary(User user){
+    void AddUserToLibrary(const User& user){
         userList.push_back(user);
     }
-    //print user info //J
-    void PrintUserInfo( User user) const {
+
+    void PrintUserInfo(const User& user) const {
         cout << "Name: " << user.getFirst() << endl;
         cout << "Favorite Genre: " << user.getGenre() << endl;
-    }
+        //print out list of books
+        cout<< "Your Books: " << "\n" << endl;
+        for (Book&book : user.getUserBooks()) {
+            ///finish
+        }
 
-    //add a book to the inventory and genre list //J
-
-    //remove a book from the database and genre list  //J
-    //puts book in library and assigns with genre
-    void AddBookToLibrary(Book book) {
+        }
+        
+    void AddBookToLibrary(const Book& book) {
         string genre = book.getGenre(); // gets genre of book
         sortGenre[genre].push_back(book); // adds book to the specific genre's list
 
         inventory[book]=nullptr; //adds new book to inventory
     }
 
-    bool checkOutBook(Book book, User* user){
+    bool checkOutBook(Book& book, User* user){
         if (inventory[book] != nullptr){ //already in someone elses hands 
             return false;
         }
@@ -64,8 +73,8 @@ public:
         }
     }
     
-    bool returnBook(Book book, User* user){
-        if(! user->bookCheck(book)){ //user doesn't have book (this is impossible)
+    bool returnBook(Book& book, User* user){
+        if(! user->bookCheck(book)) { //user doesn't have book (this is impossible)
             return false;
         }
         else {
@@ -77,21 +86,21 @@ public:
     }
 
     //queue search alg for users position in waitlist //E
-    // int checkWaitlist(User user){
-    //     auto it = find(waitlist.begin(), waitlist.end(), user);
-    //     return distance(waitlist.begin(), it);
-    // }
+     int checkWaitlist(User* user){
+        auto it = find(waitlist.begin(), waitlist.end(), &user);
+        return distance(waitlist.begin(), it);
+     }
 
     //update waitlist? add to dequq push, remove from deque pop
-    // bool joinWaitlist(User* user){
-    //     waitlist.push_back(user);
-    //     return true;
-    // }
-    // bool exitWaitlist(){
-    // if(! waitlist.empty()) //only pop if not empty
-    //     waitlist.pop_front();
-    //     return true;
-    // }
+     bool joinWaitlist(User* user){
+         waitlist.push_back(user);
+         return true;
+     }
+     bool exitWaitlist(){
+        if(! waitlist.empty()) //only pop if not empty
+            waitlist.pop_front();
+            return true;
+     }
     
 };
 
