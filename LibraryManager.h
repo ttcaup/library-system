@@ -89,7 +89,7 @@ public:
             return true;
         }
     }
-    //queue search alg for users position in waitlist //E
+    //queue search alg for users position in waitlist //
      int checkWaitlist(User& user) {
         auto it = find(waitlist.begin(), waitlist.end(), user);
         if (it == waitlist.end()) { //if not in the waitlist, return -1!
@@ -98,13 +98,14 @@ public:
         return distance(waitlist.begin(), it);
      }
 
-    //update waitlist? add to dequq push, remove from deque pop
+    //adding a user to the waitlist
      bool joinWaitlist(const User& user) {
          waitlist.push_back(user);
          return true;
      }
+     //removing a user from the waitlist
      bool exitWaitlist(){
-        if(! waitlist.empty()) //only pop if not empty
+        if(! waitlist.empty()) 
             waitlist.pop_front();
             return true;
      }
