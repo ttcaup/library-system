@@ -132,7 +132,8 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
             cout<< "You are Position #" << lib.checkWaitlist(selectedUser);
             cout<<" in the waitlist!--"<<endl;
             if(lib.checkWaitlist(selectedUser) == 0){
-                cout<<"It's time to meet them!!! We are so excited for you <3"<<endl;
+                cout<<"It's time to meet Professor Mortezie and Edward Cullen!!!" << endl;
+                cout <<"We are so excited for you <3"<<endl;
                 lib.exitWaitlist();
             }
         }
@@ -140,7 +141,7 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
     //account info
     else if (menuOpt == 4)
     {
-        cout << "\n-----Your Account Info-----"<< endl;
+        cout << "\n- - - - Your Account Info - - - -"<< endl;
         
         lib.PrintUserInfo(selectedUser);
     }
@@ -153,7 +154,7 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
     }
     else
     {
-        cout << "\nInvalid choice. Please enter a number between 1 and 5.\n";
+        cout << "\nInvalid choice! Please enter a number between 1 and 5.\n";
     }
     return true;
 //------------------end Menu------------------------//
@@ -257,7 +258,7 @@ int main(int argc, char const *argv[])
         cout << "---------------------------------------------" << endl;
         cout << "Welcome to Reader & Kurian's Library Emporium"<< endl;
         cout << "---------------------------------------------" << endl;
-        cout << "\nEnter Username: "<< endl;
+        cout << "\nEnter (or create a new) username: "<< endl;
         string userName;
         cin >> userName;
         selectedUser = lib.userInList(userName);
