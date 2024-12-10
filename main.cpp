@@ -129,7 +129,7 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         }
         else
         {
-            cout<< "You are Position #" << lib.checkWaitlist(selectedUser);
+            cout<< "--You are Position #" << lib.checkWaitlist(selectedUser);
             cout<<" in the waitlist!--"<<endl;
             if(lib.checkWaitlist(selectedUser) == 0){
                 cout<<"It's time to meet Professor Mortezie and Edward Cullen!!!" << endl;
