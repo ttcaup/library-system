@@ -123,7 +123,7 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         if(lib.checkWaitlist(selectedUser) == -1){
             lib.joinWaitlist(selectedUser);
             cout << "\nYou have joined the waitlist to meet" << endl;
-            cout << "Professor Mortezie and Edward Cullen!\n" << endl;
+            cout << "Professor Mortezaie and Edward Cullen!\n" << endl;
             cout<< "--You are Position #"<<lib.checkWaitlist(selectedUser);
             cout<<" in the waitlist!--"<<endl;
         }
@@ -132,7 +132,7 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
             cout<< "--You are Position #" << lib.checkWaitlist(selectedUser);
             cout<<" in the waitlist!--"<<endl;
             if(lib.checkWaitlist(selectedUser) == 0){
-                cout<<"It's time to meet Professor Mortezie and Edward Cullen!!!" << endl;
+                cout<<"It's time to meet Professor Mortezaie and Edward Cullen!!!" << endl;
                 cout <<"We are so excited for you <3"<<endl;
                 lib.exitWaitlist();
             }
