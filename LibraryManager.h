@@ -17,20 +17,25 @@ private:
     map< Book , User* > inventory; //maps book to user
     map< string, string> hashPass; //username -> hashed password
     map< string , vector <Book> > sortGenre;//maps genre to a list of books 
-    deque<User> waitlist; 
+    map< Book, deque<User*>> bookWaitlist; //key=book is mapped to a value=waitlist of users
     vector<User*> userList; //user database for login, local variable
 
 public:
-
-    /*void printUserList() {
-    for (User &user : userList) {
-        cout << user.getUsername() << " ";
-     }
-    }*/
    
     vector<Book> getBooksByGenre(string genre) {
         return sortGenre[genre];
     }
+
+    Book getBook(const string& title) {
+        for (auto& book : inventory) {
+            if (book.first.getTitle() == title) {
+                return book.first;  // Return a copy of the found book
+            }
+        }
+        // Return a default book if not found
+        return Book("not found", "", "", false);
+    }
+    
 
     User* userInList(string& userName) {
         for( User* userptr : userList ) {
@@ -74,6 +79,8 @@ public:
 
     bool checkOutBook(Book& book, User& user){
         if (inventory[book] != nullptr){ //already in someone elses hands 
+            bookWaitlist[book].push_back(&user);
+            cout<<"you are position " << (checkWaitlist(user, book) + 1) << " in the waitlist for this book"<< endl;
             return false;
         }
         else {
@@ -96,24 +103,25 @@ public:
         }
     }
     //queue search alg for users position in waitlist //
-     int checkWaitlist(User& user) {
-        auto it = find(waitlist.begin(), waitlist.end(), user);
-        if (it == waitlist.end()) { //if not in the waitlist, return -1!
+     int checkWaitlist(User& user, const Book& book) {
+        auto it = find(bookWaitlist[book].begin(), bookWaitlist[book].end(), &user);
+        if (it == bookWaitlist[book].end()) { //if not in the waitlist, return -1!
             return -1;//not in the list
         }
-        return distance(waitlist.begin(), it);
+        return distance(bookWaitlist[book].begin(), it);
      }
 
     //adding a user to the waitlist
-     bool joinWaitlist(const User& user) {
-         waitlist.push_back(user);
-         return true;
-     }
+    //bool joinWaitlist(const User& user) {
+    //     bookWaitlist.push_back(&user);
+    //      return true;
+    //}
+
      //removing a user from the waitlist
-     bool exitWaitlist(){
-        if(! waitlist.empty()) 
-            waitlist.pop_front();
-            return true;
+     bool exitWaitlist(const Book& book){
+        if(! bookWaitlist.empty()) {
+        bookWaitlist[book].pop_front();
+            return true;}
      }
     
 };

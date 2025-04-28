@@ -109,9 +109,7 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         if (chosenOne == nullptr)
             return true;
 
-        if (!lib.checkOutBook(*chosenOne, selectedUser)) {
-            cout << "\nBook Unavailable, checked out by another human.\n" << endl << endl;
-        }
+        lib.checkOutBook(*chosenOne, selectedUser);
     }
     
     else if(menuOpt == 2) {
@@ -135,25 +133,26 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         }
         
     }
-    else if (menuOpt == 3)// Enter/check waitlist
-    {
-        cout<<"\nJoin OR Check waitlist "<< endl;
-        if(lib.checkWaitlist(selectedUser) == -1){
-            lib.joinWaitlist(selectedUser);
-            cout << "\nYou have joined the waitlist to meet" << endl;
-            cout << "Professor Frank and Edward Cullen!\n" << endl;
-            cout<< "--You are Position #"<<lib.checkWaitlist(selectedUser);
-            cout<<" in the waitlist!--"<<endl;
+    // check waitlist
+     else if (menuOpt == 3){
+        cout<<"\nCheck waitlist "<< endl;
+        string bookTitle;
+        cout<< "enter a book title"<<endl;
+        cin>> bookTitle;
+        const Book& chosenBook = lib.getBook(bookTitle);
+         
+        if(lib.checkWaitlist(selectedUser, chosenBook) == -1){
+           cout<<"You are not on a waitlist for this book"<<endl;
         }
-        else
-        {
-            cout<< "You are Position #" << lib.checkWaitlist(selectedUser);
+        else {
+            cout<< "You are Position #" << lib.checkWaitlist(selectedUser, chosenBook);
             cout<<" in the waitlist!--"<<endl;
-            if(lib.checkWaitlist(selectedUser) == 0){
-                cout<<"It's time to meet them!!! We are so excited for you <3"<<endl;
-                lib.exitWaitlist();
+            if(lib.checkWaitlist(selectedUser, chosenBook) == 0){
+                cout<<"We checked out this book for you!"<<endl;
+                lib.exitWaitlist(chosenBook);
             }
         }
+        
     }
     //account info
     else if (menuOpt == 4)
@@ -255,9 +254,9 @@ int main(int argc, char const *argv[])
     lib.AddUserToLibrary(&Matthew);
 
     //adding users to waitlist
-    lib.joinWaitlist(Eden);
-    lib.joinWaitlist(Jasmine);
-    lib.joinWaitlist(Matthew);
+    // lib.joinWaitlist(Eden);
+    // lib.joinWaitlist(Jasmine);
+    // lib.joinWaitlist(Matthew);
 
     //adding books to users
     lib.checkOutBook(Twilight, Matthew);
