@@ -15,12 +15,14 @@ private:
     string userName;
     string firstName;
     vector<Book> books;
+    string passwordHash;
 
 public:
-    User(string username, string first) {
+    User(string username, string first, string password) {
         userName = username;
         firstName = first;
         books = {};
+        passwordHash = hashFunction(password);
     }
 
     void addBook(const Book& book) {
@@ -39,16 +41,16 @@ public:
         books.insert(books.begin() + left, book);
     }
 
-bool removeBook(const Book& book) {
-    auto it = find(books.begin(), books.end(), book);
+    bool removeBook(const Book& book) {
+        auto it = find(books.begin(), books.end(), book);
 
-    if (it == books.end()) {
-        return false;
-    } else {
-        books.erase(it);
-        return true;
+        if (it == books.end()) {
+            return false;
+        } else {
+            books.erase(it);
+            return true;
+        }
     }
-}
 
     string getUsername() const {
         return userName;
@@ -56,6 +58,10 @@ bool removeBook(const Book& book) {
 
     string getFirst() const {
         return firstName;
+    }
+
+    string getHashedPassword() const {
+        return passwordHash;
     }
     
     bool bookCheck(const Book& book) const {
@@ -68,6 +74,14 @@ bool removeBook(const Book& book) {
     }
     bool operator==(const User& other) const {
         return this->userName == other.getUsername();
+    }
+
+    static string hashFunction(string input){
+        int hash = 0;
+        for (char c : input){
+            hash = hash * 101 + c;
+        }
+        return to_string(hash); //hash is an int, but we want to return string, so we convert
     }
 };
 

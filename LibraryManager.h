@@ -15,6 +15,7 @@ class LibraryManager {
     
 private:
     map< Book , User* > inventory; //maps book to user
+    map< string, string> hashPass; //username -> hashed password
     map< string , vector <Book> > sortGenre;//maps genre to a list of books 
     deque<User> waitlist; 
     vector<User*> userList; //user database for login, local variable
@@ -33,14 +34,19 @@ public:
 
     User* userInList(string& userName) {
         for( User* userptr : userList ) {
-            if (userName == userptr->getUsername())
+            if (userName == userptr->getUsername())//need to add condition for password matching 
                 return userptr;
         }
         return nullptr;
     }
 
+    bool hashPassCheck(string userName, string password){
+        return (User::hashFunction(password) == hashPass[userName]);
+    }
+
     void AddUserToLibrary(User* userptr) {
         userList.push_back(userptr);
+        hashPass[userptr -> getUsername()] = userptr -> getHashedPassword(); 
     }
 
     void PrintUserInfo(const User& user) {

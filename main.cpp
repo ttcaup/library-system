@@ -141,7 +141,7 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         if(lib.checkWaitlist(selectedUser) == -1){
             lib.joinWaitlist(selectedUser);
             cout << "\nYou have joined the waitlist to meet" << endl;
-            cout << "Professor Mortezie and Edward Cullen!\n" << endl;
+            cout << "Professor Frank and Edward Cullen!\n" << endl;
             cout<< "--You are Position #"<<lib.checkWaitlist(selectedUser);
             cout<<" in the waitlist!--"<<endl;
         }
@@ -245,9 +245,9 @@ int main(int argc, char const *argv[])
     lib.AddBookToLibrary(frankenstein);
 
     //and users 
-    User Eden("eread", "Eden");
-    User Jasmine("jamontoast", "Jasmine");
-    User Matthew("loco4cocoa", "Matthew");
+    User Eden("eread", "Eden", "jeebers");
+    User Jasmine("jamontoast", "Jasmine", "meep");
+    User Matthew("loco4cocoa", "Matthew", "teenytiny");
     
     //add users to library
     lib.AddUserToLibrary(&Eden);
@@ -278,19 +278,26 @@ int main(int argc, char const *argv[])
         cout << "\nEnter Username: "<< endl;
         string userName;
         cin >> userName;
-        selectedUser = lib.userInList(userName);
-        
-        if (selectedUser == nullptr) {
+        if(lib.userInList(userName)){
+            cout << "\nEnter Password: "<< endl;
+            string password;
+            cin >> password;
+            if(lib.hashPassCheck(userName, password)){ 
+                selectedUser = lib.userInList(userName);
+                cout << "\nWelcome back " << selectedUser->getFirst() << "!" <<endl;
+            }  
+        }
+        else{
             cout << "\nLet's make you an account!\n" <<endl;
             cout << "What is your first name: " <<endl;
             string firstName;
             cin >> firstName;
-            selectedUser = new User(userName, firstName);
+            cout << "Enter Password: " <<endl;
+            string password;
+            cin >> password;
+            selectedUser = new User(userName, firstName, password);
             lib.AddUserToLibrary(selectedUser);
             isUserNew = true;
-        }
-        else {
-            cout << "\nWelcome back " << selectedUser->getFirst() << "!" <<endl;
         }
         //-------------end opening scene-------------------//
 
