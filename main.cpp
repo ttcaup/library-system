@@ -279,13 +279,18 @@ int main(int argc, char const *argv[])
         string userName;
         cin >> userName;
         if(lib.userInList(userName)){
-            cout << "\nEnter Password: "<< endl;
-            string password;
-            cin >> password;
-            if(lib.hashPassCheck(userName, password)){ 
-                selectedUser = lib.userInList(userName);
-                cout << "\nWelcome back " << selectedUser->getFirst() << "!" <<endl;
-            }  
+            int i;
+            for(i = 0; i < 3; i++){
+                cout << "\nEnter Password: "<< endl;
+                string password;
+                cin >> password;
+                if(lib.hashPassCheck(userName, password)){ 
+                    selectedUser = lib.userInList(userName);
+                    cout << "\nWelcome back " << selectedUser->getFirst() << "!" <<endl;
+                    break;
+                }  
+            }
+            if(i == 3) continue;
         }
         else{
             cout << "\nLet's make you an account!\n" <<endl;
