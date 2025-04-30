@@ -100,16 +100,14 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
 
         if (genre == "QUIT")
             return true;
-        
         // get books by genre
         vector<Book> selectedBooks = lib.getBooksByGenre(genre);
-        
         // prompt user to pick book, or go back to main menu
         Book* chosenOne = getBookChoice(selectedBooks);
         if (chosenOne == nullptr)
             return true;
-
-        lib.checkOutBook(*chosenOne, selectedUser);
+        //calls book title 
+        lib.checkOutBook(chosenOne->getTitle(), selectedUser);
     }
     
     else if(menuOpt == 2) {
@@ -125,7 +123,7 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         if (chosenOne == nullptr)
             return true;
         
-        if(! lib.returnBook(*chosenOne, &selectedUser)){
+        if(! lib.returnBook(chosenOne->getTitle(), &selectedUser)){
             cout<<"\nLooks like you do not have this book...\n"<<endl;
         }
         else{
@@ -134,22 +132,28 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         
     }
     // check waitlist
-     else if (menuOpt == 3){
+    else if (menuOpt == 3){
         cout<<"\nCheck waitlist "<< endl;
         string bookTitle;
         cout<< "enter a book title"<<endl;
-        cin>> bookTitle;
-        const Book& chosenBook = lib.getBook(bookTitle);
-         
-        if(lib.checkWaitlist(selectedUser, chosenBook) == -1){
-           cout<<"You are not on a waitlist for this book"<<endl;
+        cin.ignore();
+        getline(cin, bookTitle);
+        Book* chosenBook = lib.getBook(bookTitle);
+        
+        if(!chosenBook){
+            cout<< "Book not found"<< endl;
+            return true;
         }
+        if(lib.checkWaitlist(selectedUser, bookTitle) == -1){
+           cout<<"You are not on a waitlist for this book"<<endl;
+        }//jam's terittory
         else {
-            cout<< "You are Position #" << lib.checkWaitlist(selectedUser, chosenBook);
+            cout<< "You are Position #" << lib.checkWaitlist(selectedUser, bookTitle);
             cout<<" in the waitlist!--"<<endl;
-            if(lib.checkWaitlist(selectedUser, chosenBook) == 0){
+            if(lib.checkWaitlist(selectedUser, bookTitle) == 0){
                 cout<<"We checked out this book for you!"<<endl;
-                lib.exitWaitlist(chosenBook);
+                lib.exitWaitlist(bookTitle);
+                lib.checkOutBook(bookTitle, selectedUser);
             }
         }
         
@@ -176,11 +180,11 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
 //------------------end Menu------------------------//
 }
 
-int main(int argc, char const *argv[])
+int main()
 {
     // ------------------- initialize and fill the library with presets! ------------------------- //
-    LibraryManager lib = LibraryManager();
-
+    //LibraryManager lib = LibraryManager();
+    LibraryManager lib;
     //Fantasy
     Book harry("Harry Potter", "J.K. Rowling", "Fantasy");
     Book eldest("Eldest", "Christopher Paolini", "Fantasy");
@@ -259,11 +263,11 @@ int main(int argc, char const *argv[])
     // lib.joinWaitlist(Matthew);
 
     //adding books to users
-    lib.checkOutBook(Twilight, Matthew);
-    lib.checkOutBook(dracula, Jasmine);
-    lib.checkOutBook(Rogue, Jasmine);
-    lib.checkOutBook(dune, Eden);
-    lib.checkOutBook(Outlander, Eden);
+    // lib.checkOutBook(Twilight, Matthew);
+    // lib.checkOutBook(dracula, Jasmine);
+    // lib.checkOutBook(Rogue, Jasmine);
+    // lib.checkOutBook(dune, Eden);
+    // lib.checkOutBook(Outlander, Eden);
     
     bool isUserNew = false;
     User* selectedUser;

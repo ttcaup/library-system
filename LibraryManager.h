@@ -14,30 +14,28 @@ using namespace std;
 class LibraryManager {
     
 private:
-    map< Book , User* > inventory; //maps book to user
+    map< string, Book> books;
+    map< string , User* > inventory; //maps book to user
     map< string, string> hashPass; //username -> hashed password
     map< string , vector <Book> > sortGenre;//maps genre to a list of books 
-    map< Book, deque<User*>> bookWaitlist; //key=book is mapped to a value=waitlist of users
+    map< string, deque<User*>> bookWaitlist; //key=book is mapped to a value=waitlist of users
     vector<User*> userList; //user database for login, local variable
 
 public:
    
-    vector<Book> getBooksByGenre(string genre) {
+    vector<Book> getBooksByGenre(const string& genre) {
         return sortGenre[genre];
     }
 
-    Book getBook(const string& title) {
-        for (auto& book : inventory) {
-            if (book.first.getTitle() == title) {
-                return book.first;  // Return a copy of the found book
-            }
-        }
-        // Return a default book if not found
-        return Book("not found", "", "", false);
+    //find and return a pointer to the book with given title 
+    Book* getBook(const string& title) {
+        auto it = books.find(title);
+        if (it != books.end()) return &it->second;
+        return nullptr;
     }
-    
 
-    User* userInList(string& userName) {
+
+    User* userInList(const string& userName) {
         for( User* userptr : userList ) {
             if (userName == userptr->getUsername())//need to add condition for password matching 
                 return userptr;
@@ -45,7 +43,7 @@ public:
         return nullptr;
     }
 
-    bool hashPassCheck(string userName, string password){
+    bool hashPassCheck(const string& userName, const string& password){
         return (User::hashFunction(password) == hashPass[userName]);
     }
 
@@ -57,7 +55,7 @@ public:
     void PrintUserInfo(const User& user) {
         cout << "Name: " << user.getFirst() << endl;
         //print out list of books
-        if (user.getUserBooks().size() == 0) {
+        if (user.getUserBooks().empty()) {
             cout << "You currently have no books.\n\n";
         }
         else {
@@ -67,62 +65,61 @@ public:
             }
             cout << "\n\n";
         }
-
     }
 
     void AddBookToLibrary(const Book& book) {
+        string title = book.getTitle();
+        books[title] = book;
         string genre = book.getGenre(); // gets genre of book
         sortGenre[genre].push_back(book); // adds book to the specific genre's list
 
-        inventory[book]=nullptr; //adds new book to inventory
+        inventory[title]=nullptr; //adds new book to inventory
     }
 
-    bool checkOutBook(Book& book, User& user){
-        if (inventory[book] != nullptr){ //already in someone elses hands 
-            bookWaitlist[book].push_back(&user);
-            cout<<"you are position " << (checkWaitlist(user, book) + 1) << " in the waitlist for this book"<< endl;
+    bool checkOutBook(const string& title, User& user){
+        if (inventory[title] != nullptr){ //already in someone elses hands 
+            bookWaitlist[title].push_back(&user);
+            cout<<"you are position " << (checkWaitlist(user, title) + 1) << " in the waitlist for this book"<< endl;
             return false;
         }
         else {
+            Book& book = books[title];
             user.addBook(book);
-            inventory[book] = &user; //updated the inventory
+            inventory[title] = &user; //updated the inventory
             book.setStatus(false); // book is now not available
             return true;
         }
     }
-    
-    bool returnBook(Book& book, User* user){
-        if(! user->bookCheck(book)) { //user doesn't have book (this is impossible)
+    //
+    // return a book from a user and make it available in invetory again
+    bool returnBook(const string& title, User* user){
+        Book& book = books[title];
+        if(!user->bookCheck(book)) { //user doesn't have book (this is impossible)
             return false;
         }
         else {
             user->removeBook(book); //updates user list
-            inventory[book] = nullptr; //updates inventory
+            inventory[title] = nullptr; //updates inventory
             book.setStatus(true); //book is now available
             return true;
         }
     }
-    //queue search alg for users position in waitlist //
-     int checkWaitlist(User& user, const Book& book) {
-        auto it = find(bookWaitlist[book].begin(), bookWaitlist[book].end(), &user);
-        if (it == bookWaitlist[book].end()) { //if not in the waitlist, return -1!
-            return -1;//not in the list
-        }
-        return distance(bookWaitlist[book].begin(), it);
+    //checks a user's position in the waitlist for a book
+     int checkWaitlist(User& user, const string& title) {
+        auto it = find(bookWaitlist[title].begin(), bookWaitlist[title].end(), &user);
+        if (it == bookWaitlist[title].end()) return -1;  //if not in the waitlist, return -1!
+        return distance(bookWaitlist[title].begin(), it);
      }
-
-    //adding a user to the waitlist
-    //bool joinWaitlist(const User& user) {
-    //     bookWaitlist.push_back(&user);
-    //      return true;
-    //}
 
      //removing a user from the waitlist
-     bool exitWaitlist(const Book& book){
-        if(! bookWaitlist.empty()) {
-        bookWaitlist[book].pop_front();
-            return true;}
-     }
+     bool exitWaitlist(const string& title) {
+        auto& it = bookWaitlist[title];
+        if(!it.empty()) {
+            it.pop_front();
+            return true;
+        }
+        return false;
+    }
     
 };
 

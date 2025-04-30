@@ -28,6 +28,8 @@ public:
         this->genre = genre;
         status = true;
     }
+    Book() : title(""), author(""), genre(""), status(true){}
+
     string getTitle() const {
         return title;
     }
