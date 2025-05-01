@@ -10,6 +10,13 @@
 
 using namespace std;
 
+//IMPLEMENT:
+//getUserBook
+//getAllBooks
+//getAllUsers
+//----do waitlists later-----
+//joinWaitlist
+//getWaitlist
 
 class LibraryManager {
     
@@ -34,6 +41,13 @@ public:
         return nullptr;
     }
 
+    const map<string, Book>& getAllBooksMap() const {
+        return books;
+    }
+    
+    vector<User*> getAllUsers(){
+        return userList;
+    }
 
     User* userInList(const string& userName) {
         for( User* userptr : userList ) {
@@ -49,7 +63,8 @@ public:
 
     void AddUserToLibrary(User* userptr) {
         userList.push_back(userptr);
-        hashPass[userptr -> getUsername()] = userptr -> getHashedPassword(); 
+        hashPass[userptr -> getUsername()] = userptr -> getHashedPassword();
+        
     }
 
     void PrintUserInfo(const User& user) {
@@ -74,10 +89,11 @@ public:
         sortGenre[genre].push_back(book); // adds book to the specific genre's list
 
         inventory[title]=nullptr; //adds new book to inventory
+
     }
 
     bool checkOutBook(const string& title, User& user){
-        if (inventory[title] != nullptr){ //already in someone elses hands 
+        if (books[title].getStatus() == 0){ //already in someone elses hands 
             bookWaitlist[title].push_back(&user);
             cout<<"you are position " << (checkWaitlist(user, title) + 1) << " in the waitlist for this book"<< endl;
             return false;

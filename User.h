@@ -15,14 +15,31 @@ private:
     string userName;
     string firstName;
     vector<Book> books;
-    string passwordHash;
+    string passwordHash = "";
 
 public:
-    User(string username, string first, string password) {
+    User(string username, string first) {
         userName = username;
         firstName = first;
         books = {};
+    }
+    
+    bool setPassword(string password) {
+        if (passwordHash != "") {
+            cout << "ERROR: password is already set!" << endl;
+            return false;
+        }
         passwordHash = hashFunction(password);
+        return true;
+    }
+
+    bool authenticateFromFile(string passwordHash) {
+        if (this->passwordHash != "") {
+            cout << "ERROR: password is already set!" << endl;
+            return false;
+        }
+        this->passwordHash = passwordHash;
+        return true;
     }
 
     void addBook(const Book& book) {

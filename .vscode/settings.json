@@ -5,6 +5,7 @@
         "vector": "cpp",
         "chrono": "cpp",
         "deque": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "iosfwd": "cpp"
     }
 }

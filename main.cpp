@@ -12,6 +12,7 @@ Authors: Eden Reader, Jasmine Kurian
 #include "Book.h"
 #include "LibraryManager.h"
 #include "User.h"
+#include "LibraryIO.h"
 
 using namespace std;
 
@@ -104,10 +105,13 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         vector<Book> selectedBooks = lib.getBooksByGenre(genre);
         // prompt user to pick book, or go back to main menu
         Book* chosenOne = getBookChoice(selectedBooks);
+        cout<< chosenOne->getStatus() <<endl;
         if (chosenOne == nullptr)
             return true;
         //calls book title 
         lib.checkOutBook(chosenOne->getTitle(), selectedUser);
+        LibraryIO::saveToFile(lib);
+        
     }
     
     else if(menuOpt == 2) {
@@ -146,14 +150,15 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         }
         if(lib.checkWaitlist(selectedUser, bookTitle) == -1){
            cout<<"You are not on a waitlist for this book"<<endl;
-        }//jam's terittory
+        }
         else {
-            cout<< "You are Position #" << lib.checkWaitlist(selectedUser, bookTitle);
+            cout<< "You are Position #" << (lib.checkWaitlist(selectedUser, bookTitle) + 1) ;
             cout<<" in the waitlist!--"<<endl;
-            if(lib.checkWaitlist(selectedUser, bookTitle) == 0){
+            if(lib.checkWaitlist(selectedUser, bookTitle) == 0 && chosenBook->getStatus() == 1){
                 cout<<"We checked out this book for you!"<<endl;
                 lib.exitWaitlist(bookTitle);
                 lib.checkOutBook(bookTitle, selectedUser);
+                LibraryIO::saveToFile(lib);
             }
         }
         
@@ -182,92 +187,9 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
 
 int main()
 {
-    // ------------------- initialize and fill the library with presets! ------------------------- //
-    //LibraryManager lib = LibraryManager();
     LibraryManager lib;
-    //Fantasy
-    Book harry("Harry Potter", "J.K. Rowling", "Fantasy");
-    Book eldest("Eldest", "Christopher Paolini", "Fantasy");
-    Book uprooted("Uprooted", "Naomi Novik", "Fantasy");
-    Book eragon("Eragon", "Christopher Paolini", "Fantasy");
-    Book mistborn("Mistborn", "Brandon Sanderson", "Fantasy");
-    lib.AddBookToLibrary(harry);
-    lib.AddBookToLibrary(eldest);
-    lib.AddBookToLibrary(uprooted);
-    lib.AddBookToLibrary(eragon);
-    lib.AddBookToLibrary(mistborn);
-
-    //Romance
-    Book Twilight("Twilight", "Stephenie Meyer", "Romance");
-    Book Eleanor("Eleanor", "Rainbow Rowell", "Romance");
-    Book Outlander("Outlander", "Diana Gabaldon", "Romance");
-    Book fifty("Fifty Shades of Grey", "E.L. James", "Romance");
-    Book After("After", "Anna Todd", "Romance");
-    lib.AddBookToLibrary(Twilight);
-    lib.AddBookToLibrary(Eleanor);
-    lib.AddBookToLibrary(Outlander);
-    lib.AddBookToLibrary(After);
-    lib.AddBookToLibrary(fifty);
-
-    //Mystery
-    Book Sherlock("Sherlock", "Arthur Conan Doyle", "Mystery");
-    Book Gone("Gone", "Gillian Flynn", "Mystery");
-    Book Innocent("Innocent", "Scott Turow", "Mystery");
-    Book Sharp("Sharp", "Gillian Flynn", "Mystery");
-    Book Rogue("Rogue", "Ruth Ware", "Mystery");
-    lib.AddBookToLibrary(Sherlock);
-    lib.AddBookToLibrary(Gone);
-    lib.AddBookToLibrary(Innocent);
-    lib.AddBookToLibrary(Sharp);
-    lib.AddBookToLibrary(Rogue);
-    
-    //Science Fiction
-    Book dune("Dune", "Frank Herbert", "Science Fiction"); 
-    Book ender("Ender's Game", "Orson Scott Card", "Science Fiction"); 
-    Book neuromancer("Neuromancer", "William Gibson", "Science Fiction"); 
-    Book foundation("Foundation", "Isaac Asimov", "Science Fiction"); 
-    Book hyperion("Hyperion", "Dan Simmons", "Science Fiction"); 
-
-    lib.AddBookToLibrary(dune);
-    lib.AddBookToLibrary(ender);
-    lib.AddBookToLibrary(neuromancer);
-    lib.AddBookToLibrary(foundation);
-    lib.AddBookToLibrary(hyperion);
-
-    //Horror
-    Book carrie("Carrie", "Stephen King", "Horror"); 
-    Book it("It", "Stephen King", "Horror"); 
-    Book dracula("Dracula", "Bram Stoker", "Horror"); 
-    Book birdbox("Birdbox", "Josh Malerman", "Horror"); 
-    Book frankenstein("Frankenstein", "Mary Shelley", "Horror"); 
-
-    lib.AddBookToLibrary(carrie);
-    lib.AddBookToLibrary(it);
-    lib.AddBookToLibrary(dracula);
-    lib.AddBookToLibrary(birdbox);
-    lib.AddBookToLibrary(frankenstein);
-
-    //and users 
-    User Eden("eread", "Eden", "jeebers");
-    User Jasmine("jamontoast", "Jasmine", "meep");
-    User Matthew("loco4cocoa", "Matthew", "teenytiny");
-    
-    //add users to library
-    lib.AddUserToLibrary(&Eden);
-    lib.AddUserToLibrary(&Jasmine);
-    lib.AddUserToLibrary(&Matthew);
-
-    //adding users to waitlist
-    // lib.joinWaitlist(Eden);
-    // lib.joinWaitlist(Jasmine);
-    // lib.joinWaitlist(Matthew);
-
-    //adding books to users
-    // lib.checkOutBook(Twilight, Matthew);
-    // lib.checkOutBook(dracula, Jasmine);
-    // lib.checkOutBook(Rogue, Jasmine);
-    // lib.checkOutBook(dune, Eden);
-    // lib.checkOutBook(Outlander, Eden);
+    LibraryIO::loadFromFile(lib);
+   
     
     bool isUserNew = false;
     User* selectedUser;
@@ -303,8 +225,10 @@ int main()
             cout << "Enter Password: " <<endl;
             string password;
             cin >> password;
-            selectedUser = new User(userName, firstName, password);
+            selectedUser = new User(userName, firstName);
+            selectedUser->setPassword(password);
             lib.AddUserToLibrary(selectedUser);
+            LibraryIO::saveToFile(lib);
             isUserNew = true;
         }
         //-------------end opening scene-------------------//
@@ -317,6 +241,8 @@ int main()
     }
     
     if(isUserNew) delete selectedUser;
+
+    LibraryIO::saveToFile(lib);
     return 0;
 }
 
