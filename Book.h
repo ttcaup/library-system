@@ -1,4 +1,4 @@
-//Booh.h
+//Book.h
 #ifndef BOOK_H
 #define BOOK_H
 
@@ -46,10 +46,6 @@ public:
         this->status = status;
     }
   
-    // void printBookInfo(Book book) {
-    //     cout << "Book Info" << endl;//need to do
-    // }
-    
     bool operator== (const Book& other) const {
         return this->title == other.getTitle() && this->author == other.getAuthor();
     }

@@ -1,9 +1,9 @@
-After|Anna Todd|Romance|1
+After|Anna Todd|Romance|0
 Birdbox|Josh Malerman|Horror|1
 Carrie|Stephen King|Horror|1
 Dracula|Bram Stoker|Horror|1
 Dune|Frank Herbert|Science Fiction|1
-Eldest|Christopher Paolini|Fantasy|1
+Eldest|Christopher Paolini|Fantasy|0
 Eleanor|Rainbow Rowell|Romance|1
 Ender's Game|Orson Scott Card|Science Fiction|1
 Eragon|Christopher Paolini|Fantasy|1

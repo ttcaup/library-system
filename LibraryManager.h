@@ -10,13 +10,6 @@
 
 using namespace std;
 
-//IMPLEMENT:
-//getUserBook
-//getAllBooks
-//getAllUsers
-//----do waitlists later-----
-//joinWaitlist
-//getWaitlist
 
 class LibraryManager {
     
@@ -135,6 +128,12 @@ public:
             return true;
         }
         return false;
+    }
+
+    //acceptsw new book and adds it to the system
+    void donateBook(const string& title, const string& author, const string& genre){
+        Book donatedBook(title, author, genre, true); //available
+        AddBookToLibrary(donatedBook);
     }
     
 };
