@@ -1,3 +1,8 @@
 eread|eden|-26818372|After
 mattew|matt|-2022591851|Eldest
+<<<<<<< HEAD
+steze|steven|-1525328413|
+steve|david|504950|Eragon
+=======
 jasper|Jasmine|815956177|
+>>>>>>> b9095e216d5a7f7c02d24e85c4bced2b145793a1
