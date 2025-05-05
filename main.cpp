@@ -190,11 +190,11 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
                 lib.checkOutBook(bookTitle, selectedUser);
                 //saves updated library info to books.txt and users.txt
                 LibraryIO::saveToFile(lib);
-            }
+            } 
         }
         
     }
-    //account info
+    //OPTION 4: Account Info
     else if (menuOpt == 4)
     {
         cout << "\n-----Your Account Info-----"<< endl;
@@ -202,12 +202,13 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         lib.PrintUserInfo(selectedUser);
     }
 
+    //OPTION 5: Donate Book
     else if (menuOpt == 5) {
         cin.ignore();
         string title, author, genre;
         cout << "\nEnter the title of the book: ";
         getline(cin, title);
-        cout << "Enter the author the the book";
+        cout << "Enter the author the the book: ";
         getline(cin, author);
         genre = getGenreChoice();
         if (genre == "QUIT") {
@@ -219,7 +220,7 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         LibraryIO::saveToFile(lib);
         cout << "\nThe Kureader Library thanks you for your donation!\n";
     }
-    //logout
+    //OPTION 6: Logout
     else if (menuOpt == 6)
     {
         //log out
@@ -235,12 +236,12 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
 
 int main()
 {
-    LibraryManager lib;
-    LibraryIO::loadFromFile(lib);
+    LibraryManager lib; //controller for manaing users, books, and waitlists
+    LibraryIO::loadFromFile(lib); //loads data from books.txt and users.txt into memory structure
    
     
-    bool isUserNew = false;
-    User* selectedUser;
+    bool isUserNew = false; //tracks if the user was dynamically allocation and needs deletion
+    User* selectedUser; //pointer to user that is currently logged in
     
     while (true)
     {
@@ -251,19 +252,25 @@ int main()
         cout << "\nEnter Username: "<< endl;
         string userName;
         cin >> userName;
+
+        //username lookup
+        //LINEAR SEARCHES through vector<User*> userList (happens via userInList)
         if(lib.userInList(userName)){
             int i;
             for(i = 0; i < 3; i++){
                 cout << "\nEnter Password: "<< endl;
                 string password;
                 cin >> password;
+
+                //password check
+                //HASH FUNCTION: uses custome hash algorithm for password comparison
                 if(lib.hashPassCheck(userName, password)){ 
                     selectedUser = lib.userInList(userName);
                     cout << "\nWelcome back " << selectedUser->getFirst() << "!" <<endl;
                     break;
                 }  
             }
-            if(i == 3) continue;
+            if(i == 3) continue; //fails after 3 tries and takes user back to Welcome Page
         }
         else{
             cout << "\nLet's make you an account!\n" <<endl;
@@ -273,10 +280,12 @@ int main()
             cout << "Enter Password: " <<endl;
             string password;
             cin >> password;
+
+            //creates a new User object and hashes password for storage secuirity
             selectedUser = new User(userName, firstName);
             selectedUser->setPassword(password);
             lib.AddUserToLibrary(selectedUser);
-            LibraryIO::saveToFile(lib);
+            LibraryIO::saveToFile(lib); //saves user to users.txt
             isUserNew = true;
         }
         //-------------end opening scene-------------------//
@@ -288,8 +297,11 @@ int main()
         }
     }
     
+    //Clean up: If a new user was created (and allocation on the heap) --- frees the mem
     if(isUserNew) delete selectedUser;
 
+
+    //Final save to file (makes sure all library data is recorded)
     LibraryIO::saveToFile(lib);
     return 0;
 }
