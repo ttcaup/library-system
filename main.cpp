@@ -252,7 +252,7 @@ int main()
         cout << "\nEnter Username: "<< endl;
         string userName;
         cin >> userName;
-
+ 
         //username lookup
         //LINEAR SEARCHES through vector<User*> userList (happens via userInList)
         if(lib.userInList(userName)){
