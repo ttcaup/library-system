@@ -115,16 +115,12 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         if (genre == "QUIT")
             return true;
         // get books by genre
-        // SEARCHES by genre (uses map<string, vector<Book>>)
-        vector<Book> selectedBooks = lib.getBooksByGenre(genre);
-        // prompt user to pick book, or go back to main menu
-        // LINEAR SEARCHES through the genre list for book selection
+        vector<Book> selectedBooks = lib.getBooksByGenre(genre); // prompt user to pick book, or go back to main menu
         Book* chosenOne = getBookChoice(selectedBooks);
         cout<< chosenOne->getStatus() <<endl;
         if (chosenOne == nullptr)
             return true;
         //calls book title 
-        //---------map searches??? O(log n) using red-black tree
         lib.checkOutBook(chosenOne->getTitle(), selectedUser);
         LibraryIO::saveToFile(lib);
         
@@ -132,7 +128,6 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
     //OPTION 2: Returns a book
     else if(menuOpt == 2) {
         // get vector of user books
-        //LINEAR SEARCH: checks user's book list
         vector<Book> usersBook = selectedUser.getUserBooks();
         if(usersBook.size() == 0) {
             cout << "\nYou have no books. :((()" << endl;
@@ -162,7 +157,6 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         getline(cin, bookTitle); //this allowes multi-word titles
 
         //searches for book using its title
-        // MAP LOOKUP: lib.getBook uses map<string,Book>
         Book* chosenBook = lib.getBook(bookTitle);
         
         //if book not found in the library catalog
@@ -172,7 +166,6 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         }
 
         //if user IS NOT on the waitlist for chosen book
-        //LINEAR SEARCH: in deque<User*> checkWaitlist
         if(lib.checkWaitlist(selectedUser, bookTitle) == -1){
            cout<<"You are not on a waitlist for this book"<<endl;
         }
@@ -198,7 +191,6 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
     else if (menuOpt == 4)
     {
         cout << "\n-----Your Account Info-----"<< endl;
-        //VECTOR TRANSVERAL: transeverses user books
         lib.PrintUserInfo(selectedUser);
     }
 

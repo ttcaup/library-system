@@ -16,20 +16,18 @@ private:
     string genre;
     bool status;
 public:
-    Book(string title, string author, string genre, bool status) {
-        this->title = title;
-        this->genre = genre;
-        this->author = author;
-        this->status = status;
-    }
+
+    //constructor 1: default status is true, used for adding new books to library 
     Book (string title, string author, string genre) {
         this->title = title;
         this->author = author;
         this->genre = genre;
         status = true;
     }
+    //constructor 2: default, used in persistance when a book already exists and is being loaded from file 
     Book() : title(""), author(""), genre(""), status(true){}
 
+    //getter functions: 
     string getTitle() const {
         return title;
     }
@@ -46,11 +44,9 @@ public:
         this->status = status;
     }
   
+    //Book object overloaded for title and author
     bool operator== (const Book& other) const {
         return this->title == other.getTitle() && this->author == other.getAuthor();
-    }
-    bool operator< (const Book& other) const {
-        return this->title < other.getTitle();
     }
 
 };

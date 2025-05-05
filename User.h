@@ -14,39 +14,58 @@ class User {
 private:
     string userName;
     string firstName;
-    vector<Book> books;
-    string passwordHash = "";
+    vector<Book> books; //each user has a list of books associated with it
+    string passwordHash = ""; 
 
 public:
+
+    //Constructor
     User(string username, string first) {
         userName = username;
         firstName = first;
         books = {};
     }
+
+    //basic getter functions:
+    string getUsername() const {
+        return userName;
+    }
+
+    string getFirst() const {
+        return firstName;
+    }
+    
+    //password things
+    static string hashFunction(string input){
+        int hash = 0;
+        for (char c : input){
+            hash = hash * 101 + c;
+        }
+        return to_string(hash); //hash is an int, but we want to return string, so we convert
+    }
     
     bool setPassword(string password) {
         if (passwordHash != "") {
-            cout << "ERROR: password is already set!" << endl;
-            return false;
+            cout << "ERROR: password is already set!" << endl; //need this line for persistance 
+            return false;  //prevents password from being hashed each time user data is loaded from file
         }
-        passwordHash = hashFunction(password);
+        passwordHash = hashFunction(password); //hashes if needed
         return true;
     }
 
-    bool authenticateFromFile(string passwordHash) {
-        if (this->passwordHash != "") {
-            cout << "ERROR: password is already set!" << endl;
-            return false;
-        }
-        this->passwordHash = passwordHash;
-        return true;
+    void authenticateFromFile(string passwordHash) {
+        this->passwordHash = passwordHash; //setting the password 
     }
 
+    string getHashedPassword() const {
+        return passwordHash; //returns hashsed passwords for authentication
+    }
+
+    //User->book related funtions
     void addBook(const Book& book) {
+        // Perform binary search to find the correct position, vector is in abc order
         int left = 0;
         int right = books.size();
-
-        // Perform binary search to find the correct position
         while (left < right) {
             int mid = left + (right - left) / 2;
             if (books[mid].getTitle() < book.getTitle()) {
@@ -59,47 +78,31 @@ public:
     }
 
     bool removeBook(const Book& book) {
-        auto it = find(books.begin(), books.end(), book);
+        auto it = find(books.begin(), books.end(), book); //using iterators, finds book in vector
 
         if (it == books.end()) {
-            return false;
+            return false; //book not found
         } else {
             books.erase(it);
-            return true;
+            return true; //book found, deleted 
         }
     }
 
-    string getUsername() const {
-        return userName;
+    const vector<Book>& getUserBooks() const{
+        return books; //gets de-referenced book objects
     }
 
-    string getFirst() const {
-        return firstName;
-    }
-
-    string getHashedPassword() const {
-        return passwordHash;
-    }
-    
+    //checks if the user has the book
     bool bookCheck(const Book& book) const {
         auto it = find(books.begin(), books.end(), book);  // This uses operator== to compare books
         return it != books.end();
     }
-
-    const vector<Book>& getUserBooks() const{
-        return books;
-    }
+    
+    //User class is overloaded for username
     bool operator==(const User& other) const {
         return this->userName == other.getUsername();
     }
 
-    static string hashFunction(string input){
-        int hash = 0;
-        for (char c : input){
-            hash = hash * 101 + c;
-        }
-        return to_string(hash); //hash is an int, but we want to return string, so we convert
-    }
 };
 
 #endif
