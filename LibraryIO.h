@@ -13,10 +13,11 @@ class LibraryIO {
 public:
     static void saveToFile(LibraryManager& lib) {
         // Save books to file
-        ofstream booksFile("books.txt");
+        ofstream booksFile("books.txt"); 
+
         if (!booksFile) {
             cerr << "Error opening books.txt for writing.\n";
-            return;
+            return; //--goes to menu
         }
 
         // Access all books directly from the map

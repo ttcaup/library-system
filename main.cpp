@@ -138,7 +138,7 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
             cout << "\nYou have no books. :((()" << endl;
             return true;
         }
-
+ //
         // prompt user to pick book, or go back to main menu
         Book* chosenOne = getBookChoice(usersBook);
         if (chosenOne == nullptr)
