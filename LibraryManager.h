@@ -30,7 +30,8 @@ public:
     }
 
     //function returns a pointer to a user object
-    //that pointer is used throughout the users expereince to update their information
+    //that pointer is used throughout the users'
+    // expereince to update their information
     User* userInList(const string& userName) {
         for( User* userptr : userList ) {
             if (userName == userptr->getUsername())
@@ -41,13 +42,14 @@ public:
 
     void AddUserToLibrary(User* userptr) {
         userList.push_back(userptr);//adds the user pointer to userList
-        hashPass[userptr -> getUsername()] = userptr -> getHashedPassword(); //maps the userName to the hashed password
-        
+        hashPass[userptr -> getUsername()] = userptr -> getHashedPassword(); 
+        //maps the userName to the hashed password
     }
 
     bool hashPassCheck(const string& userName, const string& password){
         return (User::hashFunction(password) == hashPass[userName]); 
-        //applies hash function to plaintext "password" and then compares it to the stored hashPass
+        //applies hash function to plaintext "password" 
+        //then compares it to the stored hashPass
     }
 
     //checks a user's position in the waitlist for a book
@@ -86,7 +88,8 @@ public:
 //Book associated functions: 
 
     vector<Book> getBooksByGenre(const string& genre) {
-        return sortGenre[genre]; //returns value = list of books in key = genre
+        return sortGenre[genre]; 
+        //returns value = list of books in key = genre
     }
 
     //find and return a pointer to the book with given title 
@@ -105,9 +108,7 @@ public:
         books[title] = book;
         string genre = book.getGenre(); // gets genre of book
         sortGenre[genre].push_back(book); // adds book to the specific genre's list
-
         inventory[title]=nullptr; //adds new book to inventory
-
     }
 
     //accepts new book and adds it to the system

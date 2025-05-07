@@ -41,13 +41,15 @@ public:
         for (char c : input){
             hash = hash * 101 + c;
         }
-        return to_string(hash); //hash is an int, but we want to return string, so we convert
+        return to_string(hash); 
+        //hash is an int so we convert
     }
     
     bool setPassword(string password) {
         if (passwordHash != "") {
             cout << "ERROR: password is already set!" << endl; //need this line for persistance 
-            return false;  //prevents password from being hashed each time user data is loaded from file
+            return false;  
+            //prevents password from being hashed each time user data is loaded from file
         }
         passwordHash = hashFunction(password); //hashes if needed
         return true;

@@ -68,8 +68,8 @@ Book* getBookChoice(vector<Book>& books) {
         for(int i = 0; i < listSize; i++){
             cout << i+1 << ". " << books[i].getTitle() << " by " << books[i].getAuthor() << endl;
         }
-        cout << listSize+1 << ". RETURN TO MENU";
-        cout << "\n\nEnter your choice (1-" << listSize+1 << "): ";
+        cout << listSize + 1 << ". RETURN TO MENU";
+        cout << "\n\nEnter your choice (1-" << listSize + 1 << "): ";
         cin >> bookChoice;
 
         //choice validation , allows for retry
@@ -78,16 +78,17 @@ Book* getBookChoice(vector<Book>& books) {
             cin.clear();
             cin.ignore(256,'\n');
             cin >> bookChoice;
-    }
+        }
         // returns chosen book (or returns null)
         if (bookChoice < 1 || bookChoice > listSize+1) {
             cout << "\nInvalid choice!" << endl;
             loop = true;
         }
+    
     }
-
-    if (bookChoice == listSize+1)
+    if (bookChoice == listSize + 1){
         return nullptr;
+    }
     else
         return &books[bookChoice-1]; // pointer to the chosen book
 }
@@ -118,7 +119,6 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         // get books by genre
         vector<Book> selectedBooks = lib.getBooksByGenre(genre); // prompt user to pick book, or go back to main menu
         Book* chosenOne = getBookChoice(selectedBooks);
-        cout<< chosenOne->getStatus() <<endl;
         if (chosenOne == nullptr)
             return true;
         //calls book title 

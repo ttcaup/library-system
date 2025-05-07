@@ -24,7 +24,8 @@ public:
         this->genre = genre;
         status = true;
     }
-    //constructor 2: default, used in persistance when a book already exists and is being loaded from file 
+    //constructor 2: default
+    //used in persistance when a book already exists and is being loaded from file 
     Book() : title(""), author(""), genre(""), status(true){}
 
     //getter functions: 
