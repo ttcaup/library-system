@@ -119,7 +119,7 @@ public:
     bool checkOutBook(const string& title, User& user){
         if (books[title].getStatus() == 0){ //already in someone elses hands 
             bookWaitlist[title].push_back(&user); //adds user to book waitlist
-            cout<<"you are position " << (checkWaitlist(user, title) + 1) << " in the waitlist for this book"<< endl;
+            cout<<"\n--You are position #" << (checkWaitlist(user, title) + 1) << "in the waitlist for this book--"<< endl;
             return false;
         }
         else {

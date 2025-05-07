@@ -7,6 +7,7 @@ Course:  CMPE 126
 Authors: Eden Reader, Jasmine Kurian
 
 */
+
 #include <iostream>
 #include <string>
 #include "Book.h"
@@ -95,9 +96,9 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
 //------------------Main Menu------------------------//
     //menu display
     int menuOpt;
-    cout << "\n-----------Menu----------" << endl;
+    cout << "\n~~~~~~~Menu~~~~~~" << endl;
     cout << "\nWhat would you like to do?" << endl;;
-    cout << "1. Checkout a book\n2. Return a book\n3. Enter/Check Waitlist \n4. Account Info\n5.Donate Book\n6. Log Out" << endl;
+    cout << "1. Checkout Book\n2. Return Book\n3. Enter/Check Waitlist \n4. Donate Book\n5. Account Info\n6. Log Out" << endl;
     cout << "\nEnter your choice (1-6): ";
     cin >> menuOpt;
     //input validation
@@ -133,7 +134,7 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
             cout << "\nYou have no books. :((()" << endl;
             return true;
         }
- //
+ 
         // prompt user to pick book, or go back to main menu
         Book* chosenOne = getBookChoice(usersBook);
         if (chosenOne == nullptr)
@@ -148,11 +149,11 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         }
         
     }
-    //OPTION 3: Check waitlist or enters waitlist
+    //OPTION 3: Checks waitlist or enters waitlist
     else if (menuOpt == 3){
-        cout<<"\nCheck waitlist "<< endl;
+        cout<<"\n--------Check waitlist--------"<< endl;
         string bookTitle;
-        cout<< "enter a book title"<<endl;
+        cout<< "Enter the book title to find your waitlist status: "<<endl;
         cin.ignore();
         getline(cin, bookTitle); //this allowes multi-word titles
 
@@ -161,22 +162,22 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         
         //if book not found in the library catalog
         if(!chosenBook){
-            cout<< "Book not found"<< endl;
+            cout<< "\nBook not found."<< endl;
             return true; //returns to main menu
         }
 
         //if user IS NOT on the waitlist for chosen book
         if(lib.checkWaitlist(selectedUser, bookTitle) == -1){
-           cout<<"You are not on a waitlist for this book"<<endl;
+           cout<<"\nYou are not on a waitlist for this book."<<endl;
         }
         else {
             //USER ON WAITLIST - shows position
-            cout<< "You are Position #" << (lib.checkWaitlist(selectedUser, bookTitle) + 1) ;
-            cout<<" in the waitlist!--"<<endl;
+            cout<< "--You are Position #" << (lib.checkWaitlist(selectedUser, bookTitle) + 1) ;
+            cout<<" in the waitlist--"<<endl;
 
             //if user is first in line and book is available, the book is automaticcally checked out
             if(lib.checkWaitlist(selectedUser, bookTitle) == 0 && chosenBook->getStatus() == 1){
-                cout<<"We checked out this book for you!"<<endl;
+                cout<<"This book is now checked out for you!"<<endl;
                 // removes user form the waitlist (deque pop_front_)
                 lib.exitWaitlist(bookTitle);
                 //book is added to user's "checked out" list, so status is unavailable
@@ -187,20 +188,14 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         }
         
     }
-    //OPTION 4: Account Info
-    else if (menuOpt == 4)
-    {
-        cout << "\n-----Your Account Info-----"<< endl;
-        lib.PrintUserInfo(selectedUser);
-    }
 
-    //OPTION 5: Donate Book
-    else if (menuOpt == 5) {
+    //OPTION 4: Donate Book
+    else if (menuOpt == 4) {
         cin.ignore();
         string title, author, genre;
         cout << "\nEnter the title of the book: ";
         getline(cin, title);
-        cout << "Enter the author the the book: ";
+        cout << "Enter the author of the book: ";
         getline(cin, author);
         genre = getGenreChoice();
         if (genre == "QUIT") {
@@ -210,8 +205,16 @@ bool mainMenu(LibraryManager& lib, User& selectedUser) {
         //donating a book ->>> added to map<string, Book> and vector<Book> by genre
         lib.donateBook(title, author, genre);
         LibraryIO::saveToFile(lib);
-        cout << "\nThe Kureader Library thanks you for your donation!\n";
+        cout << "\nThe Reader & Kurian Library thanks you for your donation!\n";
     }
+
+    //OPTION 5: Account Info
+    else if (menuOpt == 5)
+    {
+        cout << "\n------Your Account Info------"<< endl;
+        lib.PrintUserInfo(selectedUser);
+    }
+
     //OPTION 6: Logout
     else if (menuOpt == 6)
     {
@@ -238,10 +241,10 @@ int main()
     while (true)
     {
         //----------------opening scene-------------------//
+        cout << "\n\n---------------------------------------------" << endl;
+        cout << "   Welcome to the Reader & Kurian Library"<< endl;
         cout << "---------------------------------------------" << endl;
-        cout << "Welcome to Reader & Kurian's Library Emporium"<< endl;
-        cout << "---------------------------------------------" << endl;
-        cout << "\nEnter Username: "<< endl;
+        cout << "\nEnter Username: ";
         string userName;
         cin >> userName;
  
@@ -250,7 +253,7 @@ int main()
         if(lib.userInList(userName)){
             int i;
             for(i = 0; i < 3; i++){
-                cout << "\nEnter Password: "<< endl;
+                cout << "\nEnter Password: ";
                 string password;
                 cin >> password;
 
@@ -265,11 +268,11 @@ int main()
             if(i == 3) continue; //fails after 3 tries and takes user back to Welcome Page
         }
         else{
-            cout << "\nLet's make you an account!\n" <<endl;
-            cout << "What is your first name: " <<endl;
+            cout << "\n--------NEW USER--------\nLet's make you an account!\n" <<endl;
+            cout << "What is your first name: ";
             string firstName;
             cin >> firstName;
-            cout << "Enter Password: " <<endl;
+            cout << "\nChoose a password: ";
             string password;
             cin >> password;
 

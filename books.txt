@@ -10,7 +10,7 @@ Eragon|Christopher Paolini|Fantasy|1
 Fifty Shades of Grey|E.L. James|Romance|1
 Foundation|Isaac Asimov|Science Fiction|1
 Frankenstein|Mary Shelley|Horror|1
-Gone|Gillian Flynn|Mystery|1
+Gone|Gillian Flynn|Mystery|0
 Harry Potter|J.K. Rowling|Fantasy|1
 Hyperion|Dan Simmons|Science Fiction|1
 Innocent|Scott Turow|Mystery|1
@@ -23,5 +23,5 @@ Rogue|Ruth Ware|Mystery|1
 Sharp|Gillian Flynn|Mystery|1
 Sherlock|Arthur Conan Doyle|Mystery|1
 Twilight|Stephenie Meyer|Romance|1
-Uprooted|Naomi Novik|Fantasy|1
-tiny|teeny|Horror|1
+Uprooted|Naomi Novik|Fantasy|0
+tiny|teeny|Horror|0
