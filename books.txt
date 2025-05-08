@@ -1,28 +1,29 @@
+Adv DSA|Frank Lin|Horror|1
 After|Anna Todd|Romance|1
 Birdbox|Josh Malerman|Horror|1
-Carrie|Stephen King|Horror|1
-DSA|frank|Horror|1
+Carrie|Stephen King|Horror|0
+DSA|Frank|Horror|1
 Dracula|Bram Stoker|Horror|1
 Dune|Frank Herbert|Science Fiction|1
 Eldest|Christopher Paolini|Fantasy|0
 Eleanor|Rainbow Rowell|Romance|0
 Ender's Game|Orson Scott Card|Science Fiction|1
 Eragon|Christopher Paolini|Fantasy|1
-Fifty Shades of Grey|E.L. James|Romance|1
+Fifty Shades of Grey|E.L. James|Romance|0
 Foundation|Isaac Asimov|Science Fiction|1
 Frankenstein|Mary Shelley|Horror|1
 Gone|Gillian Flynn|Mystery|0
 Harry Potter|J.K. Rowling|Fantasy|1
-Hyperion|Dan Simmons|Science Fiction|1
+Hyperion|Dan Simmons|Science Fiction|0
 Innocent|Scott Turow|Mystery|1
 It|Stephen King|Horror|1
-Mistborn|Brandon Sanderson|Fantasy|1
+Mistborn|Brandon Sanderson|Fantasy|0
 Neuromancer|William Gibson|Science Fiction|1
 Outlander|Diana Gabaldon|Romance|1
 Rogue|Ruth Ware|Mystery|1
-Sharp|Gillian Flynn|Mystery|1
+Sharp|Gillian Flynn|Mystery|0
 Sherlock|Arthur Conan Doyle|Mystery|1
-Tiny|teeny|Science Fiction|1
+Tiny|teeny|Science Fiction|0
 Twilight|Stephenie Meyer|Romance|1
 Uprooted|Naomi Novik|Fantasy|1
 tiny|teeny|Horror|1

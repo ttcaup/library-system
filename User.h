@@ -101,9 +101,9 @@ public:
     }
     
     //User class is overloaded for username
-    bool operator==(const User& other) const {
-        return this->userName == other.getUsername();
-    }
+    // bool operator==(const User& other) const {
+    //     return this->userName == other.getUsername();
+    // }
 
 };
 
